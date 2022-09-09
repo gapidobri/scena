@@ -14,7 +14,7 @@
 			class="navbar-burger"
 			aria-label="menu"
 			aria-expanded="false"
-			data-target="navbarBasicExample"
+			data-target="navbar"
 		>
 			<span aria-hidden="true" />
 			<span aria-hidden="true" />
@@ -22,7 +22,7 @@
 		</a>
 	</div>
 
-	<div id="navbarBasicExample" class="navbar-menu">
+	<div id="navbar" class="navbar-menu">
 		<div class="navbar-start">
 			<a href="/" class="navbar-item">Home</a>
 
@@ -44,10 +44,10 @@
 		<div class="navbar-end">
 			<div class="navbar-item">
 				<div class="buttons">
-					<a href="/" class="button is-primary">
+					<a href="/sign-up" class="button is-primary">
 						<strong>Sign up</strong>
 					</a>
-					<a href="/" class="button is-light"> Log in </a>
+					<a href="/login" class="button is-light">Log in</a>
 				</div>
 			</div>
 		</div>

@@ -1,0 +1,17 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres
+    container_name: db
+    environment:
+      POSTGRES_DB: scena
+      POSTGRES_USER: scena
+      POSTGRES_PASSWORD: gKJFjuh4ARNyP9zrk6ZVX*8mdNByU7Hi
+    ports:
+      - 5432:5432
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+volumes:
+  db_data:

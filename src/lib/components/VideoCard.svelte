@@ -21,6 +21,8 @@
 
 	#thumbnail {
 		background-image: var(--thumbnail-url);
+		background-position-x: center;
+		background-position-y: center;
 		background-size: cover;
 		height: 200px;
 	}
