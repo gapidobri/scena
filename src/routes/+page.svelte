@@ -9,7 +9,7 @@
 	<title>Scena - Home</title>
 </svelte:head>
 
-<div class="is-flex is-flex-wrap-wrap">
+<div class="is-flex is-flex-wrap-wrap m-5">
 	{#each data.videos as video}
 		<VideoCard {video} />
 	{/each}

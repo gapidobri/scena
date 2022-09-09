@@ -11,5 +11,6 @@ model Video {
   id String @id @default(uuid())
 
   title        String
+  url          String
   thumbnailUrl String?
 }
