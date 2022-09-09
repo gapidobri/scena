@@ -7,10 +7,37 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id String @id @default(uuid())
+
+  ratings Rating[]
+}
+
 model Video {
   id String @id @default(uuid())
 
-  title        String
+  title       String
+  description String?
+
   url          String
   thumbnailUrl String?
+
+  ratings Rating[]
+}
+
+enum RatingType {
+  like
+  dislike
+}
+
+model Rating {
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  video   Video  @relation(fields: [videoId], references: [id])
+  videoId String
+
+  type RatingType
+
+  @@id([userId, videoId])
 }
