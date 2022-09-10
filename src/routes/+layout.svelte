@@ -1,5 +1,10 @@
-<script>
+<script lang="ts">
+	import { KRATOS_URL } from '$lib/ory';
+
 	import '../app.scss';
+	import type { LayoutData } from './$types';
+
+	export let data: LayoutData;
 </script>
 
 <nav class="navbar" aria-label="main navigation">
@@ -44,10 +49,14 @@
 		<div class="navbar-end">
 			<div class="navbar-item">
 				<div class="buttons">
-					<a href="/sign-up" class="button is-primary">
-						<strong>Sign up</strong>
-					</a>
-					<a href="/login" class="button is-light">Log in</a>
+					{#if data.auth}
+						<a href="/logout" class="button is-light">Logout</a>
+					{:else}
+						<a href="/registration" class="button is-primary">
+							<strong>Sign up</strong>
+						</a>
+						<a href="/login" class="button is-light">Log in</a>
+					{/if}
 				</div>
 			</div>
 		</div>

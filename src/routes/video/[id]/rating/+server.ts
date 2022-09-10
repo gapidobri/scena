@@ -3,9 +3,13 @@ import { RatingType } from '@prisma/client';
 import { error, json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 
-export const POST: RequestHandler = async ({ url, params }) => {
-	const ratingParam = url.searchParams.get('rating');
+export const POST: RequestHandler = async ({ url, params, locals }) => {
+	const userId = locals.session?.identity.id;
+	if (!userId) {
+		throw error(401, 'Unauthorized');
+	}
 
+	const ratingParam = url.searchParams.get('rating');
 	if (!ratingParam) {
 		throw error(400, 'Rating query paramter is missing');
 	}
@@ -18,12 +22,12 @@ export const POST: RequestHandler = async ({ url, params }) => {
 	await prisma.rating.upsert({
 		where: {
 			userId_videoId: {
-				userId: '520fb869-ba7e-4703-bee5-bc982e4ea587',
+				userId,
 				videoId: params.id,
 			},
 		},
 		create: {
-			userId: '520fb869-ba7e-4703-bee5-bc982e4ea587',
+			userId,
 			videoId: params.id,
 			type,
 		},
@@ -31,16 +35,16 @@ export const POST: RequestHandler = async ({ url, params }) => {
 	});
 
 	const [likes, dislikes] = await Promise.all([
-		prisma.video.count({
+		prisma.rating.count({
 			where: {
-				id: params.id,
-				ratings: { some: { type: RatingType.like } },
+				videoId: params.id,
+				type: RatingType.like,
 			},
 		}),
-		prisma.video.count({
+		prisma.rating.count({
 			where: {
-				id: params.id,
-				ratings: { some: { type: RatingType.dislike } },
+				videoId: params.id,
+				type: RatingType.dislike,
 			},
 		}),
 	]);
@@ -48,27 +52,32 @@ export const POST: RequestHandler = async ({ url, params }) => {
 	return json({ likes, dislikes });
 };
 
-export const DELETE: RequestHandler = async ({ params }) => {
+export const DELETE: RequestHandler = async ({ params, locals }) => {
+	const userId = locals.session?.identity.id;
+	if (!userId) {
+		throw error(401, 'Unauthorized');
+	}
+
 	await prisma.rating.delete({
 		where: {
 			userId_videoId: {
-				userId: '520fb869-ba7e-4703-bee5-bc982e4ea587',
+				userId,
 				videoId: params.id,
 			},
 		},
 	});
 
 	const [likes, dislikes] = await Promise.all([
-		prisma.video.count({
+		prisma.rating.count({
 			where: {
-				id: params.id,
-				ratings: { some: { type: RatingType.like } },
+				videoId: params.id,
+				type: RatingType.like,
 			},
 		}),
-		prisma.video.count({
+		prisma.rating.count({
 			where: {
-				id: params.id,
-				ratings: { some: { type: RatingType.dislike } },
+				videoId: params.id,
+				type: RatingType.dislike,
 			},
 		}),
 	]);

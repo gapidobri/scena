@@ -5,12 +5,19 @@
 	export let data: PageData;
 
 	async function handleRate(rating: RatingType | null) {
-		const oldRating = data.rating;
+		if (!data.auth) return;
 
+		const oldRating = data.rating;
 		if (oldRating === rating) rating = null;
+
 		const res = await fetch(`${location.href}/rating?rating=${rating}`, {
 			method: rating ? 'POST' : 'DELETE',
-		}).then((res) => res.json());
+		})
+			.then((res) => {
+				if (res.ok) return res.json();
+				throw new Error();
+			})
+			.catch();
 
 		data = { ...data, ...res };
 		data.rating = rating;
@@ -28,22 +35,29 @@
 		<div class="p-4">
 			<div class="is-flex">
 				<h4 class="is-size-4 has-text-weight-semibold ">{data.video.title}</h4>
-				<div class="buttons ml-4">
-					<button
-						class="button"
-						on:click={() => handleRate(RatingType.like)}
-						class:is-primary={data.rating === RatingType.like}
-					>
-						Like ({data.likes})
-					</button>
-					<button
-						class="button"
-						on:click={() => handleRate(RatingType.dislike)}
-						class:is-primary={data.rating === RatingType.dislike}
-					>
-						Dislike ({data.dislikes})
-					</button>
-				</div>
+				{#if data.auth}
+					<div class="buttons ml-4">
+						<button
+							class="button"
+							on:click={() => handleRate(RatingType.like)}
+							class:is-success={data.rating === RatingType.like}
+						>
+							Like ({data.likes})
+						</button>
+						<button
+							class="button is-danger"
+							on:click={() => handleRate(RatingType.dislike)}
+							class:is-danger={data.rating === RatingType.dislike}
+						>
+							Dislike ({data.dislikes})
+						</button>
+					</div>
+				{:else}
+					<div class="ml-4 is-flex is-align-items-center">
+						<p>{data.likes} likes</p>
+						<p class="ml-3">{data.dislikes} dislikes</p>
+					</div>
+				{/if}
 			</div>
 			{#if data.video.description}
 				<p class="mt-2">{data.video.description}</p>

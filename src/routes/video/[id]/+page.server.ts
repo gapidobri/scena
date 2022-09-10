@@ -8,36 +8,49 @@ type OutputType = {
 	likes: number;
 	dislikes: number;
 	rating: RatingType | null;
+	auth: boolean;
 };
 
-export const load: PageServerLoad<OutputType> = async ({ params }) => {
+export const load: PageServerLoad<OutputType> = async ({ params, locals }) => {
+	const userId = locals.session?.identity.id;
+
 	const [video, likes, dislikes, userRating] = await Promise.all([
 		prisma.video.findUnique({
 			where: { id: params.id },
 		}),
-		prisma.video.count({
-			where: {
-				id: params.id,
-				ratings: { some: { type: RatingType.like } },
-			},
-		}),
-		prisma.video.count({
-			where: {
-				id: params.id,
-				ratings: { some: { type: RatingType.dislike } },
-			},
-		}),
-		prisma.rating.findFirst({
+		prisma.rating.count({
 			where: {
 				videoId: params.id,
-				userId: '520fb869-ba7e-4703-bee5-bc982e4ea587',
+				type: RatingType.like,
 			},
 		}),
+		prisma.rating.count({
+			where: {
+				videoId: params.id,
+				type: RatingType.dislike,
+			},
+		}),
+		userId
+			? prisma.rating.findUnique({
+					where: {
+						userId_videoId: {
+							videoId: params.id,
+							userId,
+						},
+					},
+			  })
+			: null,
 	]);
 
 	if (!video) {
 		throw error(404, 'Not found');
 	}
 
-	return { video, likes, dislikes, rating: userRating?.type ?? null };
+	return {
+		video,
+		likes,
+		dislikes,
+		rating: userRating?.type ?? null,
+		auth: !!locals.session,
+	};
 };

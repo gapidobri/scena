@@ -1,0 +1,85 @@
+version: v0.10.1
+
+serve:
+  public:
+    base_url: http://localhost:4433
+
+  admin:
+    base_url: http://localhost:4434
+
+selfservice:
+  default_browser_return_url: http://localhost:5173
+  allowed_return_urls:
+    - http://localhost:5173
+
+  methods:
+    password:
+      enabled: true
+
+  flows:
+    error:
+      ui_url: http://localhost:4455/error
+
+    settings:
+      ui_url: http://localhost:4455/settings
+      privileged_session_max_age: 15m
+
+    recovery:
+      enabled: true
+      ui_url: http://localhost:4455/recovery
+
+    verification:
+      enabled: true
+      ui_url: http://localhost:4455/verification
+      after:
+        default_browser_return_url: http://localhost:4455/
+
+    logout:
+      after:
+        default_browser_return_url: http://localhost:5173
+
+    login:
+      ui_url: http://localhost:5173/login
+      lifespan: 10m
+
+    registration:
+      lifespan: 10m
+      ui_url: http://localhost:5173/registration
+      after:
+        password:
+          hooks:
+            - hook: session
+            - hook: web_hook
+              config:
+                url: http://host.docker.internal:5173/registration/webhook
+                method: POST
+                body: file:///etc/config/kratos/register.jsonnet
+
+log:
+  level: debug
+  format: text
+  leak_sensitive_values: true
+
+secrets:
+  cookie:
+    - M3GL-dewJAqPdPir6C-_38rGGWRo_R@X
+  cipher:
+    - zBwZbHmU*Y*rG!UPEG2LZC-enfG4oMRk
+
+ciphers:
+  algorithm: xchacha20-poly1305
+
+hashers:
+  algorithm: bcrypt
+  bcrypt:
+    cost: 8
+
+identity:
+  default_schema_id: default
+  schemas:
+    - id: default
+      url: file:///etc/config/kratos/identity.schema.json
+
+courier:
+  smtp:
+    connection_uri: smtps://test:test@mailslurper:1025/?skip_ssl_verify=true
