@@ -33,9 +33,11 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@fortawesome/free-solid-svg-icons": "^6.2.0",
 		"@ory/kratos-client": "0.0.0-next.a36dda23f209",
 		"@prisma/client": "^4.3.1",
 		"bulma-toast": "^2.4.1",
-		"integrations": "link:@types/ory/integrations"
+		"integrations": "link:@types/ory/integrations",
+		"svelte-fa": "^3.0.3"
 	}
 }

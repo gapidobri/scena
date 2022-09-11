@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { KRATOS_URL } from '$lib/ory';
-
 	import '../app.scss';
 	import type { LayoutData } from './$types';
+	import Fa from 'svelte-fa';
+	import { faUpload } from '@fortawesome/free-solid-svg-icons';
 
 	export let data: LayoutData;
 </script>
@@ -50,6 +50,12 @@
 			<div class="navbar-item">
 				<div class="buttons">
 					{#if data.auth}
+						<a href="/upload" class="button is-outlined is-link">
+							<span class="icon">
+								<Fa icon={faUpload} />
+							</span>
+							<span>Upload</span>
+						</a>
 						<a href="/logout" class="button is-light">Logout</a>
 					{:else}
 						<a href="/registration" class="button is-primary">

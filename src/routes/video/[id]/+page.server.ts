@@ -12,7 +12,7 @@ type OutputType = {
 };
 
 export const load: PageServerLoad<OutputType> = async ({ params, locals }) => {
-	const userId = locals.session?.identity.id;
+	const userId = locals.session?.identity?.id;
 
 	const [video, likes, dislikes, userRating] = await Promise.all([
 		prisma.video.findUnique({
@@ -52,5 +52,6 @@ export const load: PageServerLoad<OutputType> = async ({ params, locals }) => {
 		dislikes,
 		rating: userRating?.type ?? null,
 		auth: !!locals.session,
+		canEdit: video.userId === userId,
 	};
 };

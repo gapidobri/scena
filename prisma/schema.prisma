@@ -11,6 +11,7 @@ model User {
   id String @id @default(uuid())
 
   ratings Rating[]
+  videos  Video[]
 }
 
 model Video {
@@ -18,11 +19,13 @@ model Video {
 
   title       String
   description String?
+  url         String
 
-  url          String
   thumbnailUrl String?
+  ratings      Rating[]
 
-  ratings Rating[]
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
 }
 
 enum RatingType {

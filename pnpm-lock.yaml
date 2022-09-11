@@ -1,6 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@fortawesome/free-solid-svg-icons': ^6.2.0
   '@ory/kratos-client': 0.0.0-next.a36dda23f209
   '@prisma/client': ^4.3.1
   '@sveltejs/adapter-auto': next
@@ -19,16 +20,19 @@ specifiers:
   sass: ^1.53.0
   svelte: ^3.44.0
   svelte-check: ^2.7.1
+  svelte-fa: ^3.0.3
   svelte-preprocess: ^4.10.7
   tslib: ^2.3.1
   typescript: ^4.7.4
   vite: ^3.1.0
 
 dependencies:
+  '@fortawesome/free-solid-svg-icons': 6.2.0
   '@ory/kratos-client': 0.0.0-next.a36dda23f209
   '@prisma/client': 4.3.1_prisma@4.3.1
   bulma-toast: 2.4.1
   integrations: link:@types/ory/integrations
+  svelte-fa: 3.0.3
 
 devDependencies:
   '@sveltejs/adapter-auto': 1.0.0-next.72
@@ -90,6 +94,20 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
+
+  /@fortawesome/fontawesome-common-types/6.2.0:
+    resolution: {integrity: sha512-rBevIsj2nclStJ7AxTdfsa3ovHb1H+qApwrxcTVo+NNdeJiB9V75hsKfrkG5AwNcRUNxrPPiScGYCNmLMoh8pg==}
+    engines: {node: '>=6'}
+    requiresBuild: true
+    dev: false
+
+  /@fortawesome/free-solid-svg-icons/6.2.0:
+    resolution: {integrity: sha512-UjCILHIQ4I8cN46EiQn0CZL/h8AwCGgR//1c4R96Q5viSRwuKVo0NdQEc4bm+69ZwC0dUvjbDqAHF1RR5FA3XA==}
+    engines: {node: '>=6'}
+    requiresBuild: true
+    dependencies:
+      '@fortawesome/fontawesome-common-types': 6.2.0
+    dev: false
 
   /@humanwhocodes/config-array/0.10.4:
     resolution: {integrity: sha512-mXAIHxZT3Vcpg83opl1wGlVZ9xydbfZO3r5YfRSH6Gpp2J/PfdBP0wbDa2sO6/qRbcalpoevVyW6A/fI6LfeMw==}
@@ -2187,6 +2205,10 @@ packages:
       - stylus
       - sugarss
     dev: true
+
+  /svelte-fa/3.0.3:
+    resolution: {integrity: sha512-GIikJjcVCD+5Y/x9hZc2R4gvuA0gVftacuWu1a+zVQWSFjFYZ+hhU825x+QNs2slsppfrgmFiUyU9Sz9gj4Rdw==}
+    dev: false
 
   /svelte-hmr/0.14.12_svelte@3.50.1:
     resolution: {integrity: sha512-4QSW/VvXuqVcFZ+RhxiR8/newmwOCTlbYIezvkeN6302YFRE8cXy0naamHcjz8Y9Ce3ITTZtrHrIL0AGfyo61w==}
