@@ -5,4 +5,4 @@
 	export let data: PageServerData;
 </script>
 
-<KratosUi ui={data.flow.ui} />
+<KratosUi title="Login" ui={data.flow.ui} />

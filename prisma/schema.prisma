@@ -10,8 +10,13 @@ datasource db {
 model User {
   id String @id @default(uuid())
 
+  username String? @unique
+
   ratings Rating[]
   videos  Video[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
 }
 
 model Video {
@@ -19,13 +24,19 @@ model Video {
 
   title       String
   description String?
-  url         String
 
+  url          String
   thumbnailUrl String?
   ratings      Rating[]
 
+  videoFile   File?   @relation(fields: [videoFileId], references: [id])
+  videoFileId String? @unique
+
   user   User   @relation(fields: [userId], references: [id])
   userId String
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
 }
 
 enum RatingType {
@@ -42,5 +53,18 @@ model Rating {
 
   type RatingType
 
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
   @@id([userId, videoId])
+}
+
+model File {
+  id  String @id @default(uuid())
+  key String @unique
+
+  video Video?
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
 }

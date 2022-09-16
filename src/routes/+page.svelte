@@ -1,5 +1,5 @@
 <script lang="ts">
-	import VideoCard from '$lib/components/VideoCard.svelte';
+	import VideoCard from '$lib/components/home/VideoCard.svelte';
 	import type { PageData } from './$types';
 
 	export let data: PageData;

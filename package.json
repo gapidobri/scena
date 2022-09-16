@@ -14,30 +14,33 @@
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "next",
 		"@sveltejs/kit": "next",
+		"@types/uuid": "^8.3.4",
 		"@typescript-eslint/eslint-plugin": "^5.27.0",
 		"@typescript-eslint/parser": "^5.27.0",
 		"bulma": "^0.9.4",
-		"eslint": "^8.16.0",
 		"eslint-config-prettier": "^8.3.0",
 		"eslint-plugin-svelte3": "^4.0.0",
-		"prettier": "^2.6.2",
+		"eslint": "^8.16.0",
 		"prettier-plugin-svelte": "^2.7.0",
+		"prettier": "^2.6.2",
 		"prisma": "^4.3.1",
 		"sass": "^1.53.0",
-		"svelte": "^3.44.0",
 		"svelte-check": "^2.7.1",
 		"svelte-preprocess": "^4.10.7",
+		"svelte": "^3.44.0",
 		"tslib": "^2.3.1",
 		"typescript": "^4.7.4",
 		"vite": "^3.1.0"
 	},
 	"type": "module",
 	"dependencies": {
+		"@aws-sdk/client-s3": "^3.168.0",
 		"@fortawesome/free-solid-svg-icons": "^6.2.0",
 		"@ory/kratos-client": "0.0.0-next.a36dda23f209",
 		"@prisma/client": "^4.3.1",
 		"bulma-toast": "^2.4.1",
 		"integrations": "link:@types/ory/integrations",
-		"svelte-fa": "^3.0.3"
+		"svelte-fa": "^3.0.3",
+		"uuid": "^9.0.0"
 	}
 }

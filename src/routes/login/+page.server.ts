@@ -1,7 +1,8 @@
-import { kratos, KRATOS_URL } from '$lib/ory';
+import { kratos } from '$lib/ory';
 import type { PageServerLoad } from './$types';
 import type { SelfServiceLoginFlow } from '@ory/kratos-client';
 import { redirect } from '@sveltejs/kit';
+import { KRATOS_URL } from '$env/static/private';
 
 type OutputType = {
 	flow?: SelfServiceLoginFlow;

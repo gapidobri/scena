@@ -3,9 +3,12 @@
 	import type { PageData } from './$types';
 	import Fa from 'svelte-fa';
 	import { faEdit, faCheck } from '@fortawesome/free-solid-svg-icons';
+	import VideoCard from '$lib/components/home/VideoCard.svelte';
+	import UserCard from '$lib/components/video/UserCard.svelte';
 
 	export let data: PageData;
 	let edit = false;
+	let editLoading = false;
 
 	async function handleRate(rating: RatingType | null) {
 		if (!data.auth) return;
@@ -24,6 +27,29 @@
 
 		data = { ...data, ...res, rating };
 	}
+
+	async function handleEdit() {
+		if (!edit) {
+			edit = !edit;
+			return;
+		}
+
+		editLoading = true;
+
+		const video = await fetch(`${location.href}/update`, {
+			method: 'POST',
+			body: JSON.stringify(data.video),
+		})
+			.then((res) => {
+				if (res.ok) return res.json();
+				throw new Error();
+			})
+			.catch();
+
+		data.video = video;
+		editLoading = false;
+		edit = !edit;
+	}
 </script>
 
 <svelte:head>
@@ -32,10 +58,10 @@
 
 <div class="m-6 is-flex is-flex-direction-column is-align-items-center">
 	<div>
-		<video id="video-player" controls src={data.video.url}>
+		<video class="box p-0 mb-4" id="video-player" controls src={data.video.url}>
 			<track kind="captions" />
 		</video>
-		<div class="p-4">
+		<div class="mx-4">
 			<div class="is-flex">
 				<div class="is-flex is-flex-grow-1">
 					{#if edit}
@@ -53,7 +79,7 @@
 								Like ({data.likes})
 							</button>
 							<button
-								class="button is-danger"
+								class="button"
 								on:click={() => handleRate(RatingType.dislike)}
 								class:is-danger={data.rating === RatingType.dislike}
 							>
@@ -68,15 +94,13 @@
 					{/if}
 				</div>
 				{#if data.canEdit}
-					<button class="button" on:click={() => (edit = !edit)}>
+					<button class="button" class:is-loading={editLoading} on:click={handleEdit}>
 						<span class="icon is-small">
 							<Fa icon={edit ? faCheck : faEdit} />
 						</span>
 					</button>
 				{/if}
 			</div>
-
-			<p class="mt-2 is-size-7">{data.video.userId}</p>
 
 			<div class="mt-2">
 				{#if edit}
@@ -88,6 +112,9 @@
 				{:else}
 					<span>{data.video.description ?? ''}</span>
 				{/if}
+			</div>
+			<div class="is-flex mt-4">
+				<UserCard username={data.video.user.username ?? data.video.userId} />
 			</div>
 		</div>
 	</div>

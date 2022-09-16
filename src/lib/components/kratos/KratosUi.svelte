@@ -8,6 +8,7 @@
 	} from '@ory/kratos-client';
 	import type { UiContainer } from '@ory/kratos-client';
 
+	export let title: string;
 	export let ui: UiContainer;
 
 	if (browser) {
@@ -39,7 +40,8 @@
 		});
 </script>
 
-<div class="container is-max-desktop">
+<div class="container box is-max-desktop mt-6 p-6">
+	<h1 class="title">{title}</h1>
 	<form action={ui.action} method={ui.method}>
 		{#each inputNodes as node}
 			<div class="field">

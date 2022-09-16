@@ -1,6 +1,5 @@
 import { V0alpha2Api, Configuration } from '@ory/kratos-client';
-
-export const KRATOS_URL = 'http://localhost:4433';
+import { KRATOS_URL } from '$env/static/private';
 
 export const kratos = new V0alpha2Api(
 	new Configuration({

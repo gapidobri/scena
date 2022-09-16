@@ -12,6 +12,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		event.locals.session = await kratos
 			.toSession(undefined, event.request.headers.get('cookie') ?? undefined)
 			.then((res) => res.data);
+		event.locals.userId = event.locals.session?.identity.id ?? null;
 	} catch (e) {
 		// Unauthorized
 	}

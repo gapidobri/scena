@@ -1,6 +1,9 @@
+import { S3_BUCKET } from '$env/static/private';
 import prisma from '$lib/prisma';
+import s3 from '$lib/s3';
 import { error, redirect } from '@sveltejs/kit';
 import type { Actions } from './$types';
+import { v4 as uuid } from 'uuid';
 
 export const actions: Actions = {
 	default: async ({ request, locals }) => {
@@ -16,11 +19,24 @@ export const actions: Actions = {
 
 		const description = data.get('description')?.toString();
 
+		const file = data.get('video') as File;
+
+		const arrayBuffer = await file.arrayBuffer();
+
+		const key = `${uuid()}-${file.name}`;
+
+		await s3.putObject({
+			Bucket: S3_BUCKET,
+			Key: key,
+			Body: Buffer.from(arrayBuffer),
+		});
+
 		const video = await prisma.video.create({
 			data: {
 				title,
 				description,
-				userId,
+				user: { connect: { id: userId } },
+				videoFile: { create: { key } },
 				url: 'https://s3.eu-central-1.wasabisys.com/aerio-media/anime/no_game_no_life/[Judas]%20No%20Game%20No%20Life%20-%20S01E01.mp4',
 				thumbnailUrl:
 					'https://www.themoviedb.org/t/p/w500_and_h282_face/ceFPuGQYuZuHvTbj5icOvxUSPwS.jpg',

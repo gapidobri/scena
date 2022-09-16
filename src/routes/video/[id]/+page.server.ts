@@ -12,11 +12,12 @@ type OutputType = {
 };
 
 export const load: PageServerLoad<OutputType> = async ({ params, locals }) => {
-	const userId = locals.session?.identity?.id;
+	const { userId } = locals;
 
 	const [video, likes, dislikes, userRating] = await Promise.all([
 		prisma.video.findUnique({
 			where: { id: params.id },
+			include: { user: { select: { username: true } } },
 		}),
 		prisma.rating.count({
 			where: {
