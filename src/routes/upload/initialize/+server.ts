@@ -18,8 +18,6 @@ export const POST: RequestHandler = async ({ request }) => {
 		})
 		.promise();
 
-	console.log(upload);
-
 	return json({
 		fileId: upload.UploadId,
 		fileKey: upload.Key,

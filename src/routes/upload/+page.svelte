@@ -6,6 +6,7 @@
 	let videoFiles: FileList;
 	let thumbnailInput: HTMLInputElement;
 	let thumbnailSrc: string | undefined;
+	let progress: number = 0;
 
 	function handleThumbnailFileChange() {
 		const fileReader = new FileReader();
@@ -24,7 +25,9 @@
 			file: videoFiles[0],
 			fileName: videoFiles[0].name.split('.')[0],
 		});
-		uploader.onProgress(console.log);
+		uploader.onProgress((p) => {
+			progress = p.percentage;
+		});
 		uploader.onError(console.log);
 
 		uploader.start();
@@ -99,4 +102,8 @@
 			<button class="button is-secondary" on:click={uploadVideo}>Upload Video</button>
 		</div>
 	</form>
+
+	{#if progress > 0 && progress < 100}
+		<progress class="progress is-primary mt-4" value={progress} max="100" />
+	{/if}
 </div>

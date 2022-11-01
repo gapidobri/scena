@@ -205,7 +205,6 @@ export class Uploader {
 				xhr.onreadystatechange = () => {
 					if (xhr.readyState === 4 && xhr.status === 200) {
 						const ETag = xhr.getResponseHeader('ETag');
-						console.log(xhr.getAllResponseHeaders());
 
 						if (ETag) {
 							const uploadedPart = {

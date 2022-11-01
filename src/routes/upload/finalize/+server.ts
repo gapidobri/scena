@@ -16,8 +16,6 @@ type RequestBody = {
 export const POST: RequestHandler = async ({ request }) => {
 	const body: RequestBody = await request.json();
 
-	console.log(body);
-
 	const output = await s3
 		.completeMultipartUpload({
 			Bucket: S3_BUCKET,
