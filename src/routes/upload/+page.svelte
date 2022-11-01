@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Fa from 'svelte-fa';
 	import { faUpload } from '@fortawesome/free-solid-svg-icons';
+	import { Uploader } from '$lib/upload';
 
 	let videoFiles: FileList;
 	let thumbnailInput: HTMLInputElement;
@@ -14,6 +15,19 @@
 		if (thumbnailInput.files) {
 			fileReader.readAsDataURL(thumbnailInput.files[0]);
 		}
+	}
+
+	function uploadVideo(event: MouseEvent) {
+		event.preventDefault();
+
+		const uploader = new Uploader({
+			file: videoFiles[0],
+			fileName: videoFiles[0].name.split('.')[0],
+		});
+		uploader.onProgress(console.log);
+		uploader.onError(console.log);
+
+		uploader.start();
 	}
 </script>
 
@@ -82,6 +96,7 @@
 
 		<div class="field">
 			<button class="button is-primary" type="submit">Upload</button>
+			<button class="button is-secondary" on:click={uploadVideo}>Upload Video</button>
 		</div>
 	</form>
 </div>

@@ -25,11 +25,13 @@ export const actions: Actions = {
 
 		const key = `${uuid()}-${file.name}`;
 
-		await s3.putObject({
+		const res = await s3.putObject({
 			Bucket: S3_BUCKET,
 			Key: key,
 			Body: Buffer.from(arrayBuffer),
 		});
+
+		console.log(res);
 
 		const video = await prisma.video.create({
 			data: {
