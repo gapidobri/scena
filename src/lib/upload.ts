@@ -5,6 +5,8 @@ type UploaderOptions = {
 	threadsQuantity?: number;
 	file: File;
 	fileName: string;
+	fileId?: string;
+	fileKey?: string;
 };
 
 type Part = {
@@ -44,15 +46,18 @@ export class Uploader {
 
 	private onProgressFn: (progress: Progress) => void = () => {};
 	private onErrorFn: (error: Error) => void = () => {};
+	private onSuccessFn: () => void = () => {};
 
 	constructor(options: UploaderOptions) {
 		this.chunkSize = options.chunkSize ?? 1024 * 1024 * 5;
 		this.threadsQuantity = Math.min(options.threadsQuantity ?? 5, 15);
 		this.file = options.file;
 		this.fileName = options.fileName;
+		this.fileId = options.fileId ?? null;
+		this.fileKey = options.fileKey ?? null;
 	}
 
-	start() {
+	public start() {
 		this.initialize();
 	}
 
@@ -63,18 +68,21 @@ export class Uploader {
 			fileName += `.${ext}`;
 		}
 
-		const initRes = await fetch('/upload/initialize', {
-			method: 'POST',
-			body: JSON.stringify({ name: fileName }),
-		});
+		// Skip initialization if already initialized
+		if (!this.fileId && !this.fileKey) {
+			const initRes = await fetch('/dash/upload/initialize', {
+				method: 'POST',
+				body: JSON.stringify({ name: fileName }),
+			});
 
-		const initJson = await initRes.json();
-		this.fileId = initJson.fileId;
-		this.fileKey = initJson.fileKey;
+			const initJson = await initRes.json();
+			this.fileId = initJson.fileId;
+			this.fileKey = initJson.fileKey;
+		}
 
 		const numberOfParts = Math.ceil(this.file.size / this.chunkSize);
 
-		const urlsRes = await fetch('/upload/urls', {
+		const urlsRes = await fetch('/dash/upload/urls', {
 			method: 'POST',
 			body: JSON.stringify({
 				fileId: this.fileId,
@@ -138,7 +146,7 @@ export class Uploader {
 
 	private async sendCompleteRequest() {
 		if (this.fileId && this.fileKey) {
-			await fetch('/upload/finalize', {
+			const res = await fetch('/dash/upload/finalize', {
 				method: 'POST',
 				body: JSON.stringify({
 					fileId: this.fileId,
@@ -146,6 +154,11 @@ export class Uploader {
 					parts: this.uploadedParts,
 				}),
 			});
+			if (res.ok) {
+				this.onSuccessFn();
+			} else {
+				this.onErrorFn(new Error('Failed to finalize upload'));
+			}
 		}
 	}
 
@@ -242,6 +255,11 @@ export class Uploader {
 
 	public onError(onError: (error: Error) => void) {
 		this.onErrorFn = onError;
+		return this;
+	}
+
+	public onSuccess(onSuccess: () => void) {
+		this.onSuccessFn = onSuccess;
 		return this;
 	}
 

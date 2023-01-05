@@ -7,6 +7,6 @@ type OutputType = {
 };
 
 export const load: PageServerLoad<OutputType> = async () => {
-	const videos = await prisma.video.findMany();
+	const videos = await prisma.video.findMany({ where: { published: true } });
 	return { videos };
 };

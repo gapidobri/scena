@@ -4,10 +4,6 @@ import type { Handle } from '@sveltejs/kit';
 export const handle: Handle = async ({ event, resolve }) => {
 	const sessionId = event.cookies.get('ory_kratos_session');
 
-	if (!sessionId) {
-		return await resolve(event);
-	}
-
 	try {
 		event.locals.session = await kratos
 			.toSession(undefined, event.request.headers.get('cookie') ?? undefined)

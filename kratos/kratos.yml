@@ -21,7 +21,7 @@ selfservice:
       ui_url: http://localhost:4455/error
 
     settings:
-      ui_url: http://localhost:4455/settings
+      ui_url: http://localhost:5173/dash/profile
       privileged_session_max_age: 15m
 
     recovery:

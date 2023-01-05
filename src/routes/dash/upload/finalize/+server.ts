@@ -3,6 +3,7 @@ import s3 from '$lib/s3';
 import type { RequestHandler } from './$types';
 import { orderBy } from 'lodash';
 import { json } from '@sveltejs/kit';
+import prisma from '$lib/prisma';
 
 type RequestBody = {
 	fileId: string;
@@ -26,6 +27,11 @@ export const POST: RequestHandler = async ({ request }) => {
 			},
 		})
 		.promise();
+
+	await prisma.upload.update({
+		where: { id: body.fileId },
+		data: { url: output.Location },
+	});
 
 	return json({ url: output.Location });
 };

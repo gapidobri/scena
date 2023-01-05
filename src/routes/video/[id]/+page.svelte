@@ -1,14 +1,9 @@
 <script lang="ts">
 	import { RatingType } from '@prisma/client';
 	import type { PageData } from './$types';
-	import Fa from 'svelte-fa';
-	import { faEdit, faCheck } from '@fortawesome/free-solid-svg-icons';
-	import VideoCard from '$lib/components/home/VideoCard.svelte';
 	import UserCard from '$lib/components/video/UserCard.svelte';
 
 	export let data: PageData;
-	let edit = false;
-	let editLoading = false;
 
 	async function handleRate(rating: RatingType | null) {
 		if (!data.auth) return;
@@ -27,59 +22,34 @@
 
 		data = { ...data, ...res, rating };
 	}
-
-	async function handleEdit() {
-		if (!edit) {
-			edit = !edit;
-			return;
-		}
-
-		editLoading = true;
-
-		const video = await fetch(`${location.href}/update`, {
-			method: 'POST',
-			body: JSON.stringify(data.video),
-		})
-			.then((res) => {
-				if (res.ok) return res.json();
-				throw new Error();
-			})
-			.catch();
-
-		data.video = video;
-		editLoading = false;
-		edit = !edit;
-	}
 </script>
 
 <svelte:head>
 	<title>{data.video.title}</title>
 </svelte:head>
 
-<div class="m-6 is-flex is-flex-direction-column is-align-items-center">
-	<div>
-		<video class="box p-0 mb-4" id="video-player" controls src={data.video.url}>
+<div class="m-6 flex flex-col items-center">
+	<div class="max-w-6xl">
+		<video class="card mb-4 aspect-video" controls src={data.url}>
 			<track kind="captions" />
 		</video>
+
 		<div class="mx-4">
-			<div class="is-flex">
-				<div class="is-flex is-flex-grow-1">
-					{#if edit}
-						<input class="input" type="text" bind:value={data.video.title} placeholder="Title" />
-					{:else}
-						<span class="is-size-4 has-text-weight-semibold">{data.video.title}</span>
-					{/if}
+			<div class="flex">
+				<div class="flex flex-grow items-center">
+					<span class="text-xl font-semibold">{data.video.title}</span>
+
 					{#if data.auth}
-						<div class="buttons is-flex-wrap-nowrap mx-4">
+						<div class="buttons nowrap mx-4">
 							<button
-								class="button"
+								class="btn"
 								on:click={() => handleRate(RatingType.like)}
 								class:is-success={data.rating === RatingType.like}
 							>
 								Like ({data.likes})
 							</button>
 							<button
-								class="button"
+								class="btn"
 								on:click={() => handleRate(RatingType.dislike)}
 								class:is-danger={data.rating === RatingType.dislike}
 							>
@@ -87,41 +57,20 @@
 							</button>
 						</div>
 					{:else}
-						<div class="ml-4 is-flex is-align-items-center">
+						<div class="ml-4 flex items-center">
 							<p>{data.likes} likes</p>
 							<p class="ml-3">{data.dislikes} dislikes</p>
 						</div>
 					{/if}
 				</div>
-				{#if data.canEdit}
-					<button class="button" class:is-loading={editLoading} on:click={handleEdit}>
-						<span class="icon is-small">
-							<Fa icon={edit ? faCheck : faEdit} />
-						</span>
-					</button>
-				{/if}
 			</div>
 
 			<div class="mt-2">
-				{#if edit}
-					<textarea
-						class="textarea"
-						bind:value={data.video.description}
-						placeholder="Description"
-					/>
-				{:else}
-					<span>{data.video.description ?? ''}</span>
-				{/if}
+				<span>{data.video.description ?? ''}</span>
 			</div>
-			<div class="is-flex mt-4">
+			<div class="flex mt-4">
 				<UserCard username={data.video.user.username ?? data.video.userId} />
 			</div>
 		</div>
 	</div>
 </div>
-
-<style>
-	#video-player {
-		width: 1500px;
-	}
-</style>

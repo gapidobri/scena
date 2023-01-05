@@ -10,8 +10,9 @@ type OutputType = {
 
 export const load: PageServerLoad<OutputType> = async ({ request, url }) => {
 	const flowId = url.searchParams.get('flow');
+	const returnTo = url.searchParams.get('return_to') ?? '/';
 	if (!flowId) {
-		throw redirect(301, KRATOS_URL + '/self-service/login/browser');
+		throw redirect(301, KRATOS_URL + '/self-service/login/browser?return_to=' + returnTo);
 	}
 
 	const flow = await kratos

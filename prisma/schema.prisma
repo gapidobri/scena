@@ -22,15 +22,17 @@ model User {
 model Video {
   id String @id @default(uuid())
 
-  title       String
+  title       String?
   description String?
+  published   Boolean @default(false)
 
-  url          String
-  thumbnailUrl String?
-  ratings      Rating[]
+  ratings Rating[]
 
-  videoFile   File?   @relation(fields: [videoFileId], references: [id])
+  videoFile   Upload? @relation(fields: [videoFileId], references: [id], name: "video")
   videoFileId String? @unique
+
+  thumbnailFile   Upload? @relation(fields: [thumbnailFileId], references: [id], name: "thumbnail")
+  thumbnailFileId String? @unique
 
   user   User   @relation(fields: [userId], references: [id])
   userId String
@@ -59,11 +61,14 @@ model Rating {
   @@id([userId, videoId])
 }
 
-model File {
-  id  String @id @default(uuid())
+model Upload {
+  id  String @id
   key String @unique
 
-  video Video?
+  url String? @unique
+
+  video     Video? @relation(name: "video")
+  thumbnail Video? @relation(name: "thumbnail")
 
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt

@@ -35,33 +35,32 @@
 					label: attributes.label?.text,
 					onclick: undefined,
 					node_type: undefined,
+					type: attributes.type as 'button' | 'submit' | 'reset' | null | undefined,
 				},
 			};
 		});
 </script>
 
-<div class="container box is-max-desktop mt-6 p-6">
-	<h1 class="title">{title}</h1>
-	<form action={ui.action} method={ui.method}>
-		{#each inputNodes as node}
-			<div class="field">
+<div class="grid place-content-center h-3/4">
+	<div>
+		<h1 class="text-4xl text-center mb-4">{title}</h1>
+		<form class="flex flex-col" action={ui.action} method={ui.method}>
+			{#each inputNodes as node}
 				{#if node.type === UiNodeTypeEnum.Input}
 					{#if node.attributes.type === UiNodeInputAttributesTypeEnum.Submit}
-						<div class="control">
-							<button class="button is-link" {...node.attributes}>{node.meta.label?.text}</button>
-						</div>
+						<button class="btn btn-primary mt-4" {...node.attributes}>
+							{node.meta.label?.text}
+						</button>
 					{:else}
 						{#if node.meta.label}
 							<label class="label" for={node.attributes.name}>
 								{node.meta.label?.text}
 							</label>
 						{/if}
-						<div class="control">
-							<input class="input" {...node.attributes} />
-						</div>
+						<input class="input input-bordered" {...node.attributes} />
 					{/if}
 				{/if}
-			</div>
-		{/each}
-	</form>
+			{/each}
+		</form>
+	</div>
 </div>
