@@ -55,6 +55,25 @@
 			<div class="flex mt-4">
 				<UserCard username={data.video.user.username ?? data.video.userId} />
 			</div>
+
+			<form
+				method="post"
+				action="?/comment"
+				class="flex flex-col items-start gap-2 mt-8"
+				use:enhance
+			>
+				<textarea name="message" class="textarea textarea-bordered w-96" />
+				<button class="btn btn-primary">Post</button>
+			</form>
+
+			<div class="space-y-2 mt-8 flex flex-col w-1/3">
+				{#each data.video.comments as comment}
+					<div class="card bg-base-200 p-4">
+						<span class="font-bold">{comment.user.username}</span>
+						{comment.message}
+					</div>
+				{/each}
+			</div>
 		</div>
 	</div>
 </div>

@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { browser } from '$app/environment';
-	import { toast } from 'bulma-toast';
 	import {
 		type UiNodeInputAttributes,
 		UiNodeTypeEnum,
@@ -11,18 +9,18 @@
 	export let title: string;
 	export let ui: UiContainer;
 
-	if (browser) {
-		if (ui.messages?.length) {
-			for (const message of ui.messages) {
-				toast({
-					message: message.text,
-					type: 'is-danger',
-					animate: { in: 'fadeIn', out: 'fadeOut' },
-					position: 'bottom-center',
-				});
-			}
-		}
-	}
+	// if (browser) {
+	// 	if (ui.messages?.length) {
+	// 		for (const message of ui.messages) {
+	// 			toast({
+	// 				message: message.text,
+	// 				type: 'is-danger',
+	// 				animate: { in: 'fadeIn', out: 'fadeOut' },
+	// 				position: 'bottom-center',
+	// 			});
+	// 		}
+	// 	}
+	// }
 
 	const inputNodes = ui.nodes
 		.filter((node) => node.type === UiNodeTypeEnum.Input)

@@ -45,6 +45,9 @@ export const load: PageServerLoad<OutputType> = async ({
 			include: {
 				user: { select: { username: true } },
 				videoFile: { select: { id: true, key: true } },
+				comments: {
+					select: { message: true, user: { select: { username: true } } },
+				},
 			},
 		}),
 		prisma.rating.count({
@@ -102,5 +105,19 @@ export const actions: Actions = {
 		}
 
 		await setRating(userId, videoId, RatingType.dislike);
+	},
+
+	comment: async ({ params: { id: videoId }, locals: { userId }, request }) => {
+		if (!userId) throw error(401, 'Unauthorized');
+
+		const formData = await request.formData();
+		const message = formData.get('message')?.toString();
+		if (!message) {
+			throw error(400, 'Message missing');
+		}
+
+		await prisma.comment.create({
+			data: { message, videoId, userId },
+		});
 	},
 };

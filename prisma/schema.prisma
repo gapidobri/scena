@@ -12,9 +12,10 @@ model User {
 
   username String? @unique
 
-  ratings         Rating[]
-  videos          Video[]
-  uploadAccessUrl UploadAccessUrl[]
+  ratings          Rating[]
+  videos           Video[]
+  uploadAccessUrls UploadAccessUrl[]
+  comments         Comment[]
 
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
@@ -27,7 +28,8 @@ model Video {
   description String?
   published   Boolean @default(false)
 
-  ratings Rating[]
+  ratings  Rating[]
+  comments Comment[]
 
   videoFile   Upload? @relation(fields: [videoFileId], references: [id], name: "video")
   videoFileId String? @unique
@@ -91,4 +93,19 @@ model UploadAccessUrl {
   updatedAt DateTime? @updatedAt
 
   @@id([uploadId, userId])
+}
+
+model Comment {
+  id String @id @default(uuid())
+
+  message String
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  video   Video  @relation(fields: [videoId], references: [id])
+  videoId String
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
 }
