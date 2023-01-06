@@ -9,6 +9,7 @@ import {
 } from '$env/static/private';
 import prisma from './prisma';
 import moment from 'moment';
+import { error } from '@sveltejs/kit';
 
 const s3 = new S3({
 	endpoint: S3_ENDPOINT,
@@ -23,19 +24,19 @@ const s3 = new S3({
 export async function getPrivateVideoUrl(uploadId: string, userId: string) {
 	let url: string | null = null;
 
-	const access = await prisma.uploadAccessUrl.findUnique({
-		where: {
-			uploadId_userId: { uploadId, userId },
-		},
-		include: {
-			upload: { select: { key: true } },
-		},
-	});
+	const [upload, access] = await prisma.$transaction([
+		prisma.upload.findUnique({ where: { id: uploadId } }),
+		prisma.uploadAccessUrl.findUnique({
+			where: { uploadId_userId: { uploadId, userId } },
+		}),
+	]);
+
+	if (!upload) throw error(404, 'Not Found');
 
 	if (!access || moment().isAfter(access.expirationDate)) {
 		url = await s3.getSignedUrlPromise('getObject', {
 			Bucket: S3_BUCKET,
-			Key: access?.upload?.key,
+			Key: upload.key,
 			Expires: parseInt(S3_EXPIRATION_TIME),
 		});
 		const expirationDate = moment().add(S3_EXPIRATION_TIME, 'seconds').toDate();

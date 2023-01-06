@@ -3,6 +3,8 @@
 	import type { PageData } from './$types';
 
 	export let data: PageData;
+
+	let deleting = false;
 </script>
 
 <form
@@ -30,5 +32,12 @@
 	<br />
 
 	<button class="btn btn-primary" formaction="?/update">Update</button>
-	<button class="btn btn-error" formaction="?/delete">Delete</button>
+	<button
+		class="btn btn-error"
+		class:loading={deleting}
+		formaction="?/delete"
+		on:click={() => (deleting = true)}
+	>
+		Delete
+	</button>
 </form>

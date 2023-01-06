@@ -1,4 +1,6 @@
+import { S3_BUCKET } from '$env/static/private';
 import prisma from '$lib/prisma';
+import s3 from '$lib/s3';
 import { error, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 
@@ -48,12 +50,25 @@ export const actions: Actions = {
 			url: video.videoFile?.url,
 		};
 	},
+
 	delete: async ({ params, locals: { userId } }) => {
 		if (!userId) throw error(401, 'Unauthorized');
 
-		const video = await prisma.video.findFirst({ where: { id: params.id, userId } });
+		const video = await prisma.video.findFirst({
+			where: { id: params.id, userId },
+			select: { id: true, videoFile: { select: { key: true } } },
+		});
 		if (!video) {
 			throw error(404, 'Not Found');
+		}
+
+		if (video.videoFile) {
+			await s3
+				.deleteObject({
+					Bucket: S3_BUCKET,
+					Key: video.videoFile.key,
+				})
+				.promise();
 		}
 
 		await prisma.video.delete({ where: { id: video.id } });
