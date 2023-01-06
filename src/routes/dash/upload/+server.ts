@@ -20,7 +20,6 @@ export const POST: RequestHandler = async ({ request, locals: { userId } }) => {
 		.createMultipartUpload({
 			Bucket: S3_BUCKET,
 			Key: `${uuid()}-${body.name}`,
-			ACL: 'public-read',
 		})
 		.promise();
 	if (!key || !uploadId) {

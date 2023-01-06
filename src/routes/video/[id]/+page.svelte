@@ -2,26 +2,9 @@
 	import { RatingType } from '@prisma/client';
 	import type { PageData } from './$types';
 	import UserCard from '$lib/components/video/UserCard.svelte';
+	import { enhance } from '$app/forms';
 
 	export let data: PageData;
-
-	async function handleRate(rating: RatingType | null) {
-		if (!data.auth) return;
-
-		const oldRating = data.rating;
-		if (oldRating === rating) rating = null;
-
-		const res = await fetch(`${location.href}/rating?rating=${rating}`, {
-			method: rating ? 'POST' : 'DELETE',
-		})
-			.then((res) => {
-				if (res.ok) return res.json();
-				throw new Error();
-			})
-			.catch();
-
-		data = { ...data, ...res, rating };
-	}
 </script>
 
 <svelte:head>
@@ -40,22 +23,23 @@
 					<span class="text-xl font-semibold">{data.video.title}</span>
 
 					{#if data.auth}
-						<div class="buttons nowrap mx-4">
+						<form class="mx-4" method="post" use:enhance>
 							<button
 								class="btn"
-								on:click={() => handleRate(RatingType.like)}
-								class:is-success={data.rating === RatingType.like}
+								formaction="?/like"
+								class:btn-success={data.rating === RatingType.like}
 							>
 								Like ({data.likes})
 							</button>
+
 							<button
 								class="btn"
-								on:click={() => handleRate(RatingType.dislike)}
-								class:is-danger={data.rating === RatingType.dislike}
+								formaction="?/dislike"
+								class:btn-error={data.rating === RatingType.dislike}
 							>
 								Dislike ({data.dislikes})
 							</button>
-						</div>
+						</form>
 					{:else}
 						<div class="ml-4 flex items-center">
 							<p>{data.likes} likes</p>
