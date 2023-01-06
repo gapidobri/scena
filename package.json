@@ -1,7 +1,10 @@
 {
 	"name": "scena",
+	"description": "Open source YouTube clone",
 	"version": "0.0.1",
 	"private": true,
+	"author": "Gašper Dobrovoljc",
+	"repository": "https://github.com/gapidobri/scena",
 	"scripts": {
 		"dev": "vite dev --host 0.0.0.0",
 		"build": "vite build",
@@ -19,7 +22,6 @@
 		"@typescript-eslint/eslint-plugin": "^5.48.0",
 		"@typescript-eslint/parser": "^5.48.0",
 		"autoprefixer": "^10.4.13",
-		"bulma": "^0.9.4",
 		"daisyui": "^2.46.1",
 		"eslint": "^8.31.0",
 		"eslint-config-prettier": "^8.6.0",
@@ -45,8 +47,6 @@
 		"@ory/kratos-client": "0.0.0-next.a36dda23f209",
 		"@prisma/client": "^4.8.1",
 		"aws-sdk": "^2.1290.0",
-		"bulma-toast": "^2.4.2",
-		"joi": "^17.7.0",
 		"lodash": "^4.17.21",
 		"moment": "^2.29.4",
 		"svelte-fa": "^3.0.3",
