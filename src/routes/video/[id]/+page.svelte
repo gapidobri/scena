@@ -1,8 +1,9 @@
 <script lang="ts">
 	import { RatingType } from '@prisma/client';
+	import Fa from 'svelte-fa/src/fa.svelte';
 	import type { PageData } from './$types';
-	import UserCard from '$lib/components/video/UserCard.svelte';
 	import { enhance } from '$app/forms';
+	import { faDownload } from '@fortawesome/free-solid-svg-icons';
 
 	export let data: PageData;
 </script>
@@ -46,14 +47,28 @@
 							<p class="ml-3">{data.dislikes} dislikes</p>
 						</div>
 					{/if}
+
+					<div class="grow flex justify-end">
+						<a href={data.url} rel="noreferrer" target="_blank" class="btn">
+							<Fa icon={faDownload} />
+						</a>
+					</div>
 				</div>
 			</div>
 
 			<div class="mt-2">
 				<span>{data.video.description ?? ''}</span>
 			</div>
-			<div class="flex mt-4">
-				<UserCard username={data.video.user.username ?? data.video.userId} />
+			<div class="flex mt-4 gap-2">
+				{data.video.user.username}
+
+				{#if !data.self}
+					<form method="post" use:enhance>
+						<button class="btn" class:btn-primary={!data.subscribed} formaction="?/subscribe">
+							{data.subscribed ? 'Subscribed' : 'Subscribe'}
+						</button>
+					</form>
+				{/if}
 			</div>
 
 			<form

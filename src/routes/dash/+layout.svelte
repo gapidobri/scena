@@ -1,5 +1,13 @@
 <script>
-	import { faDashboard, faUpload, faUser, faVideo } from '@fortawesome/free-solid-svg-icons';
+	import {
+		faDashboard,
+		faFolderOpen,
+		faNewspaper,
+		faSubscript,
+		faUpload,
+		faUser,
+		faVideo,
+	} from '@fortawesome/free-solid-svg-icons';
 	import Fa from 'svelte-fa/src/fa.svelte';
 </script>
 
@@ -21,6 +29,12 @@
 			<a href="/dash/videos">
 				<Fa icon={faVideo} />
 				Videos
+			</a>
+		</li>
+		<li>
+			<a href="/dash/subscribers">
+				<Fa icon={faNewspaper} />
+				Subscribers
 			</a>
 		</li>
 		<li>

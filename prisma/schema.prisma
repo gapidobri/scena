@@ -17,6 +17,9 @@ model User {
   uploadAccessUrls UploadAccessUrl[]
   comments         Comment[]
 
+  subscribers   Subscription[] @relation(name: "subscribed")
+  subscriptions Subscription[] @relation(name: "subscriber")
+
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
 }
@@ -100,12 +103,25 @@ model Comment {
 
   message String
 
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId String
 
-  video   Video  @relation(fields: [videoId], references: [id])
+  video   Video  @relation(fields: [videoId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   videoId String
 
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
+}
+
+model Subscription {
+  subscribed   User   @relation(fields: [subscribedId], references: [id], name: "subscribed", onDelete: Cascade, onUpdate: Cascade)
+  subscribedId String
+
+  subscriber   User   @relation(fields: [subscriberId], references: [id], name: "subscriber", onDelete: Cascade, onUpdate: Cascade)
+  subscriberId String
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
+  @@id([subscribedId, subscriberId])
 }

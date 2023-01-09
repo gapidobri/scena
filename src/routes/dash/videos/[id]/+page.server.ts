@@ -4,14 +4,11 @@ import s3 from '$lib/s3';
 import { error, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ params, locals: { userId } }) => {
+export const load: PageServerLoad = async ({ params: { id }, locals: { userId } }) => {
 	if (!userId) throw error(401, 'Unauthorized');
 
 	const video = await prisma.video.findFirst({
-		where: {
-			id: params.id,
-			userId,
-		},
+		where: { id, userId },
 		include: { videoFile: true },
 	});
 	if (!video) throw error(404, 'Not Found');
@@ -25,17 +22,32 @@ export const load: PageServerLoad = async ({ params, locals: { userId } }) => {
 };
 
 export const actions: Actions = {
-	update: async ({ params, request, locals: { userId } }) => {
+	update: async ({ params: { id }, request, locals: { userId } }) => {
 		if (!userId) throw error(401, 'Unauthorized');
 
 		const data = await request.formData();
+		const published = data.get('published')?.toString() === 'true';
 
-		await prisma.video.findFirstOrThrow({ where: { id: params.id, userId } }).catch(() => {
-			throw error(404, 'Not Found');
+		let video = await prisma.video.findFirst({
+			where: { id, userId },
+			include: { videoFile: true },
 		});
+		if (!video) {
+			throw error(404, 'Not Found');
+		}
 
-		const video = await prisma.video.update({
-			where: { id: params.id },
+		if (video.videoFile?.key && video.published !== published) {
+			await s3
+				.putObjectAcl({
+					Bucket: S3_BUCKET,
+					Key: video.videoFile.key,
+					ACL: published ? 'public-read' : 'private',
+				})
+				.promise();
+		}
+
+		video = await prisma.video.update({
+			where: { id },
 			data: {
 				title: data.get('title')?.toString(),
 				published: data.get('published')?.toString() === 'true',
@@ -51,11 +63,11 @@ export const actions: Actions = {
 		};
 	},
 
-	delete: async ({ params, locals: { userId } }) => {
+	delete: async ({ params: { id }, locals: { userId } }) => {
 		if (!userId) throw error(401, 'Unauthorized');
 
 		const video = await prisma.video.findFirst({
-			where: { id: params.id, userId },
+			where: { id, userId },
 			select: { id: true, videoFile: { select: { key: true } } },
 		});
 		if (!video) {

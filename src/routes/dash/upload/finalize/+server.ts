@@ -1,4 +1,4 @@
-import { S3_BUCKET } from '$env/static/private';
+import { CDN_PUBLIC_URL, S3_BUCKET } from '$env/static/private';
 import s3 from '$lib/s3';
 import type { RequestHandler } from './$types';
 import { orderBy } from 'lodash';
@@ -28,10 +28,12 @@ export const POST: RequestHandler = async ({ request }) => {
 		})
 		.promise();
 
+	const url = `${CDN_PUBLIC_URL}/${output.Key}`;
+
 	await prisma.upload.update({
 		where: { id: body.fileId },
-		data: { url: output.Location },
+		data: { url },
 	});
 
-	return json({ url: output.Location });
+	return json({ url });
 };
