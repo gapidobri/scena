@@ -1,4 +1,4 @@
-import { S3_BUCKET } from '$env/static/private';
+import { env } from '$env/dynamic/private';
 import prisma from '$lib/prisma';
 import s3 from '$lib/s3';
 import { v4 as uuid } from 'uuid';
@@ -18,7 +18,7 @@ export const POST: RequestHandler = async ({ request, locals: { userId } }) => {
 
 	const { Key: key, UploadId: uploadId } = await s3
 		.createMultipartUpload({
-			Bucket: S3_BUCKET,
+			Bucket: env.S3_BUCKET,
 			Key: `${uuid()}-${body.name}`,
 		})
 		.promise();

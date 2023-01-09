@@ -4,14 +4,21 @@ services:
   db:
     image: postgres:14
     container_name: db
-    environment:
-      POSTGRES_DB: scena
-      POSTGRES_USER: scena
-      POSTGRES_PASSWORD: gKJFjuh4ARNyP9zrk6ZVX*8mdNByU7Hi
+    env_file:
+      - .docker.env
     ports:
       - 5432:5432
     volumes:
       - db_data:/var/lib/postgresql/data
+    restart: on-failure
+
+  app:
+    image: scena
+    container_name: app
+    env_file:
+      - .docker.env
+    ports:
+      - 3000:3000
     restart: on-failure
 
   kratos-migrate:

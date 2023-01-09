@@ -13,8 +13,8 @@
 </svelte:head>
 
 <div class="m-6 flex flex-col items-center">
-	<div class="max-w-6xl">
-		<video class="card mb-4 aspect-video" controls src={data.url}>
+	<div class="max-w-6xl w-full flex flex-col">
+		<video class="card mb-4 aspect-video bg-base-200 shadow-lg" controls src={data.url}>
 			<track kind="captions" />
 		</video>
 
@@ -62,7 +62,7 @@
 			<div class="flex mt-4 gap-2">
 				{data.video.user.username}
 
-				{#if !data.self}
+				{#if data.auth && !data.self}
 					<form method="post" use:enhance>
 						<button class="btn" class:btn-primary={!data.subscribed} formaction="?/subscribe">
 							{data.subscribed ? 'Subscribed' : 'Subscribe'}
@@ -71,15 +71,17 @@
 				{/if}
 			</div>
 
-			<form
-				method="post"
-				action="?/comment"
-				class="flex flex-col items-start gap-2 mt-8"
-				use:enhance
-			>
-				<textarea name="message" class="textarea textarea-bordered w-96" />
-				<button class="btn btn-primary">Post</button>
-			</form>
+			{#if data.auth}
+				<form
+					method="post"
+					action="?/comment"
+					class="flex flex-col items-start gap-2 mt-8"
+					use:enhance
+				>
+					<textarea name="message" class="textarea textarea-bordered w-96" />
+					<button class="btn btn-primary">Post</button>
+				</form>
+			{/if}
 
 			<div class="space-y-2 mt-8 flex flex-col w-1/3">
 				{#each data.video.comments as comment}

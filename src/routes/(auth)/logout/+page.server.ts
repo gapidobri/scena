@@ -9,5 +9,5 @@ export const load: PageServerLoad = async ({ request, url }) => {
 
 	const returnTo = url.searchParams.get('return_to') ?? '/';
 
-	throw redirect(301, `${flow.logout_url}&return_to=${returnTo}`);
+	throw redirect(307, `${flow.logout_url}&return_to=${returnTo}`);
 };

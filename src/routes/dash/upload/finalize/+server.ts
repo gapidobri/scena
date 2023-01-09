@@ -1,7 +1,7 @@
-import { CDN_PUBLIC_URL, S3_BUCKET } from '$env/static/private';
+import { env } from '$env/dynamic/private';
 import s3 from '$lib/s3';
 import type { RequestHandler } from './$types';
-import { orderBy } from 'lodash';
+import _ from 'lodash';
 import { json } from '@sveltejs/kit';
 import prisma from '$lib/prisma';
 
@@ -19,16 +19,16 @@ export const POST: RequestHandler = async ({ request }) => {
 
 	const output = await s3
 		.completeMultipartUpload({
-			Bucket: S3_BUCKET,
+			Bucket: env.S3_BUCKET,
 			Key: body.fileKey,
 			UploadId: body.fileId,
 			MultipartUpload: {
-				Parts: orderBy(body.parts, ['PartNumber'], ['asc']),
+				Parts: _.orderBy(body.parts, ['PartNumber'], ['asc']),
 			},
 		})
 		.promise();
 
-	const url = `${CDN_PUBLIC_URL}/${output.Key}`;
+	const url = `${env.CDN_PUBLIC_URL}/${output.Key}`;
 
 	await prisma.upload.update({
 		where: { id: body.fileId },

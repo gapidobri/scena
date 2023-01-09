@@ -52,12 +52,12 @@ export const load: PageServerLoad = async ({
 		throw error(404, 'Not found');
 	}
 
-	const self = video.userId === userId;
+	const selfVideo = video.userId === userId;
 
 	let userRating: Rating | null = null;
 	let subscribed = false;
 	if (userId) {
-		if (!self) {
+		if (!selfVideo) {
 			const subscription = await prisma.subscription.findFirst({
 				where: {
 					subscriberId: userId,
@@ -83,7 +83,7 @@ export const load: PageServerLoad = async ({
 		rating: userRating?.type ?? null,
 		auth: !!session,
 		subscribed,
-		self,
+		self: selfVideo,
 	};
 };
 

@@ -1,4 +1,4 @@
-import { S3_BUCKET } from '$env/static/private';
+import { env } from '$env/dynamic/private';
 import prisma from '$lib/prisma';
 import s3 from '$lib/s3';
 import { error, redirect } from '@sveltejs/kit';
@@ -39,7 +39,7 @@ export const actions: Actions = {
 		if (video.videoFile?.key && video.published !== published) {
 			await s3
 				.putObjectAcl({
-					Bucket: S3_BUCKET,
+					Bucket: env.S3_BUCKET,
 					Key: video.videoFile.key,
 					ACL: published ? 'public-read' : 'private',
 				})
@@ -77,7 +77,7 @@ export const actions: Actions = {
 		if (video.videoFile) {
 			await s3
 				.deleteObject({
-					Bucket: S3_BUCKET,
+					Bucket: env.S3_BUCKET,
 					Key: video.videoFile.key,
 				})
 				.promise();

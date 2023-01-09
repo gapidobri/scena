@@ -9,19 +9,6 @@
 	export let title: string;
 	export let ui: UiContainer;
 
-	// if (browser) {
-	// 	if (ui.messages?.length) {
-	// 		for (const message of ui.messages) {
-	// 			toast({
-	// 				message: message.text,
-	// 				type: 'is-danger',
-	// 				animate: { in: 'fadeIn', out: 'fadeOut' },
-	// 				position: 'bottom-center',
-	// 			});
-	// 		}
-	// 	}
-	// }
-
 	const inputNodes = ui.nodes
 		.filter((node) => node.type === UiNodeTypeEnum.Input)
 		.map((node) => {
@@ -39,7 +26,7 @@
 		});
 </script>
 
-<div class="grid place-content-center h-3/4">
+<div class="grid place-content-center h-full">
 	<div>
 		<h1 class="text-4xl text-center mb-4">{title}</h1>
 		<form class="flex flex-col" action={ui.action} method={ui.method}>
@@ -62,3 +49,13 @@
 		</form>
 	</div>
 </div>
+
+{#if ui.messages}
+	<div class="m-4 space-y-4">
+		{#each ui.messages as message}
+			<div class="alert alert-error shadow-lg flex justify-center">
+				<span>{message.text}</span>
+			</div>
+		{/each}
+	</div>
+{/if}

@@ -1,18 +1,17 @@
 import { kratos } from '$lib/ory';
 import type { PageServerLoad } from './$types';
-import type { SelfServiceLoginFlow } from '@ory/kratos-client';
 import { redirect } from '@sveltejs/kit';
-import { KRATOS_URL } from '$env/static/private';
+import { env } from '$env/dynamic/private';
 
-type OutputType = {
-	flow?: SelfServiceLoginFlow;
-};
-
-export const load: PageServerLoad<OutputType> = async ({ request, url }) => {
+export const load: PageServerLoad = async ({ request, url }) => {
 	const flowId = url.searchParams.get('flow');
 	const returnTo = url.searchParams.get('return_to') ?? '/';
 	if (!flowId) {
-		throw redirect(301, KRATOS_URL + '/self-service/login/browser?return_to=' + returnTo);
+		console.log('Kratos public url', env.KRATOS_PUBLIC_URL);
+		throw redirect(
+			307,
+			env.KRATOS_PUBLIC_URL + '/self-service/login/browser?return_to=' + returnTo,
+		);
 	}
 
 	const flow = await kratos

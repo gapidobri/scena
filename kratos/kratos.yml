@@ -8,9 +8,9 @@ serve:
     base_url: http://localhost:4434
 
 selfservice:
-  default_browser_return_url: http://localhost:5173
+  default_browser_return_url: http://localhost:3000
   allowed_return_urls:
-    - http://localhost:5173
+    - http://localhost:3000
 
   methods:
     password:
@@ -21,7 +21,7 @@ selfservice:
       ui_url: http://localhost:4455/error
 
     settings:
-      ui_url: http://localhost:5173/dash/profile
+      ui_url: http://localhost:3000/dash/profile
       privileged_session_max_age: 15m
 
     recovery:
@@ -36,22 +36,22 @@ selfservice:
 
     logout:
       after:
-        default_browser_return_url: http://localhost:5173
+        default_browser_return_url: http://localhost:3000
 
     login:
-      ui_url: http://localhost:5173/login
+      ui_url: http://localhost:3000/login
       lifespan: 10m
 
     registration:
       lifespan: 10m
-      ui_url: http://localhost:5173/registration
+      ui_url: http://localhost:3000/registration
       after:
         password:
           hooks:
             - hook: session
             - hook: web_hook
               config:
-                url: http://host.docker.internal:5173/registration/webhook
+                url: http://app:3000/registration/webhook
                 method: POST
                 body: file:///etc/config/kratos/register.jsonnet
 
