@@ -4,5 +4,8 @@ import { env } from '$env/dynamic/private';
 export const kratos = new V0alpha2Api(
 	new Configuration({
 		basePath: env.KRATOS_PRIVATE_URL,
+		baseOptions: {
+			withCredentials: true,
+		},
 	}),
 );
