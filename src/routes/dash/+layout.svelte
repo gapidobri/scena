@@ -1,9 +1,7 @@
 <script>
 	import {
 		faDashboard,
-		faFolderOpen,
 		faNewspaper,
-		faSubscript,
 		faUpload,
 		faUser,
 		faVideo,

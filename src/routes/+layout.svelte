@@ -2,6 +2,8 @@
 	import '../app.scss';
 	import { page } from '$app/stores';
 	import type { LayoutData } from './$types';
+	import Fa from 'svelte-fa/src/fa.svelte';
+	import { faGithub } from '@fortawesome/free-brands-svg-icons';
 
 	export let data: LayoutData;
 
@@ -27,5 +29,13 @@
 		</div>
 	</div>
 
-	<slot />
+	<div class="h-full">
+		<slot />
+	</div>
+
+	<div class="flex m-3 justify-end">
+		<a href="https://github.com/gapidobri/scena">
+			<Fa icon={faGithub} size="1.5em" />
+		</a>
+	</div>
 </div>

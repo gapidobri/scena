@@ -60,7 +60,7 @@
 				<span>{data.video.description ?? ''}</span>
 			</div>
 			<div class="flex mt-4 gap-2">
-				{data.video.user.username}
+				{data.video.user.username ?? data.video.userId}
 
 				{#if data.auth && !data.self}
 					<form method="post" use:enhance>

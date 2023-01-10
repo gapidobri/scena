@@ -33,7 +33,6 @@ export class Uploader {
 	private readonly chunkSize: number;
 	private readonly threadsQuantity: number;
 	private readonly file: File;
-	private readonly fileName: string;
 
 	private aborted = false;
 	private uploadedSize = 0;
@@ -52,7 +51,6 @@ export class Uploader {
 		this.chunkSize = options.chunkSize ?? 1024 * 1024 * 5;
 		this.threadsQuantity = Math.min(options.threadsQuantity ?? 5, 15);
 		this.file = options.file;
-		this.fileName = options.fileName;
 		this.fileId = options.fileId ?? null;
 		this.fileKey = options.fileKey ?? null;
 	}
@@ -62,24 +60,6 @@ export class Uploader {
 	}
 
 	private async initialize() {
-		let fileName = this.fileName;
-		const ext = this.file.name.split('.').pop();
-		if (ext) {
-			fileName += `.${ext}`;
-		}
-
-		// Skip initialization if already initialized
-		if (!this.fileId && !this.fileKey) {
-			const initRes = await fetch('/dash/upload/initialize', {
-				method: 'POST',
-				body: JSON.stringify({ name: fileName }),
-			});
-
-			const initJson = await initRes.json();
-			this.fileId = initJson.fileId;
-			this.fileKey = initJson.fileKey;
-		}
-
 		const numberOfParts = Math.ceil(this.file.size / this.chunkSize);
 
 		const urlsRes = await fetch('/dash/upload/urls', {
