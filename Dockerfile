@@ -1,8 +1,6 @@
-FROM node:16-alpine AS base
+FROM node:16-alpine AS build
 
 RUN npm i -g pnpm
-
-FROM base AS build
 
 # Fetch dependencies
 COPY pnpm-lock.yaml ./
@@ -35,13 +33,15 @@ RUN pnpm build
 # Remove development dependencies
 RUN pnpm prune --production
 
-FROM base as app
+FROM node:16-alpine as app
 
 WORKDIR /app
 
+RUN npm i -g prisma
+
 COPY --from=build ./package.json ./package.json
-COPY --from=build ./pnpm-lock.yaml ./pnpm-lock.yaml
 COPY --from=build ./node_modules ./node_modules
 COPY --from=build ./build .
+COPY --from=build ./prisma ./prisma
 
 CMD [ "node", "index.js" ]

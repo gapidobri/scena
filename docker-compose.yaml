@@ -12,11 +12,20 @@ services:
       - db_data:/var/lib/postgresql/data
     restart: on-failure
 
+  app-migrate:
+    image: scena
+    container_name: app-migrate
+    env_file:
+      - .docker.env
+    command: prisma migrate deploy
+
   app:
     image: scena
     container_name: app
     env_file:
       - .docker.env
+    depends_on:
+      - app-migrate
     ports:
       - 3000:3000
     restart: on-failure
