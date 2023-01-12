@@ -9,7 +9,9 @@
 <div class="flex gap-4 mt-4">
 	{#each data.subscriptions as sub}
 		<div class="card p-4 bg-base-200 shadow-md">
-			{sub.subscriber.username}
+			<a href="/{sub.subscriber.username}">
+				{sub.subscriber.username}
+			</a>
 		</div>
 	{/each}
 </div>

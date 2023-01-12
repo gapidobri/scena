@@ -7,7 +7,6 @@ export const load: PageServerLoad = async ({ request, url }) => {
 	const flowId = url.searchParams.get('flow');
 	const returnTo = url.searchParams.get('return_to') ?? '/';
 	if (!flowId) {
-		console.log('Kratos public url', env.KRATOS_PUBLIC_URL);
 		throw redirect(
 			307,
 			env.KRATOS_PUBLIC_URL + '/self-service/login/browser?return_to=' + returnTo,

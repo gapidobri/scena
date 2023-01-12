@@ -21,7 +21,7 @@ selfservice:
       ui_url: http://localhost:4455/error
 
     settings:
-      ui_url: http://localhost:3000/dash/profile
+      ui_url: http://localhost:3000/dash/account
       privileged_session_max_age: 15m
 
     recovery:
@@ -51,7 +51,8 @@ selfservice:
             - hook: session
             - hook: web_hook
               config:
-                url: http://app:3000/registration/webhook
+                url: http://docker.host.internal:3000/registration/webhook
+                # url: http://app:3000/registration/webhook
                 method: POST
                 body: file:///etc/config/kratos/register.jsonnet
 
