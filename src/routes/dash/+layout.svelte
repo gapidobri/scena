@@ -1,14 +1,18 @@
-<script>
+<script lang="ts">
 	import { page } from '$app/stores';
 	import {
 		faAddressCard,
 		faDashboard,
 		faNewspaper,
+		faRobot,
 		faUpload,
 		faUser,
 		faVideo,
 	} from '@fortawesome/free-solid-svg-icons';
 	import Fa from 'svelte-fa/src/fa.svelte';
+	import type { LayoutData } from './$types';
+
+	export let data: LayoutData;
 </script>
 
 <div class="flex flex-row h-full space-x-4 m-4">
@@ -49,6 +53,14 @@
 				Upload
 			</a>
 		</li>
+		{#if data.admin}
+			<li>
+				<a href="/dash/admin" class:active={$page.url.pathname.startsWith('/dash/admin')}>
+					<Fa icon={faRobot} />
+					Admin
+				</a>
+			</li>
+		{/if}
 	</ul>
 
 	<div class="w-full">

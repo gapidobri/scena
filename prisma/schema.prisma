@@ -10,7 +10,8 @@ datasource db {
 model User {
   id String @id @default(uuid())
 
-  username String @unique @default(cuid())
+  username String  @unique @default(cuid())
+  admin    Boolean @default(false)
 
   ratings          Rating[]
   videos           Video[]

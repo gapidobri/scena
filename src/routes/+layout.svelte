@@ -4,6 +4,7 @@
 	import type { LayoutData } from './$types';
 	import Fa from 'svelte-fa/src/fa.svelte';
 	import { faGithub } from '@fortawesome/free-brands-svg-icons';
+	import logoText from '$lib/assets/logo_text.png';
 
 	export let data: LayoutData;
 
@@ -14,7 +15,9 @@
 <div class="flex flex-col h-screen">
 	<div class="navbar bg-base-200">
 		<div class="flex-1">
-			<a href="/" class="btn btn-ghost normal-case text-xl">Scena</a>
+			<a href="/" class="btn btn-ghost normal-case text-xl">
+				<img src={logoText} alt="scena_logo" class="h-8" />
+			</a>
 		</div>
 		<div class="flex-none">
 			<ul class="menu menu-horizontal px-1">
