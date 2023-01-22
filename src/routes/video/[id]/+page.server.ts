@@ -33,10 +33,10 @@ export const load: PageServerLoad = async ({
 		prisma.video.findFirst({
 			where: { id: videoId, published: true },
 			include: {
-				user: { select: { username: true } },
+				user: { select: { id: true, username: true } },
 				videoFile: { select: { id: true, key: true, url: true } },
 				comments: {
-					select: { message: true, user: { select: { username: true } } },
+					select: { id: true, message: true, user: { select: { id: true, username: true } } },
 				},
 			},
 		}),
@@ -76,7 +76,10 @@ export const load: PageServerLoad = async ({
 	// }
 
 	return {
-		video,
+		video: {
+			...video,
+			comments: video.comments.map((comment) => ({ ...comment, self: comment.user.id === userId })),
+		},
 		likes,
 		dislikes,
 		url: video.videoFile?.url ?? null,
@@ -158,5 +161,19 @@ export const actions: Actions = {
 				},
 			});
 		}
+	},
+
+	deleteComment: async ({ request, locals: { userId } }) => {
+		if (!userId) throw error(401, 'Unauthorized');
+
+		const data = await request.formData();
+
+		const id = data.get('id');
+		if (!id) throw error(500, 'Comment id is missing');
+
+		const comment = await prisma.comment.findFirst({ where: { id: id.toString(), userId } });
+		if (!comment) throw error(404, 'Comment not found');
+
+		await prisma.comment.delete({ where: { id: comment.id } });
 	},
 };

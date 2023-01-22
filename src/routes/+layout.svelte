@@ -32,11 +32,11 @@
 		</div>
 	</div>
 
-	<div class="h-full">
+	<div class="flex-grow">
 		<slot />
 	</div>
 
-	<div class="flex m-3 justify-end">
+	<div class="flex p-3 justify-end">
 		<a href="https://github.com/gapidobri/scena">
 			<Fa icon={faGithub} size="1.5em" />
 		</a>

@@ -1,4 +1,4 @@
-import { kratos } from '$lib/ory';
+import { kratosAdmin } from '$lib/ory';
 import prisma from '$lib/prisma';
 import { error } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
@@ -10,7 +10,7 @@ export const load: PageServerLoad = async ({ parent }) => {
 
 export const actions: Actions = {
 	sync: async () => {
-		const res = await kratos.adminListIdentities();
+		const res = await kratosAdmin.adminListIdentities();
 
 		await prisma.$transaction(
 			res.data.map((user) => {

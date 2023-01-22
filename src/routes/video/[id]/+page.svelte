@@ -3,7 +3,7 @@
 	import Fa from 'svelte-fa/src/fa.svelte';
 	import type { PageData } from './$types';
 	import { enhance } from '$app/forms';
-	import { faDownload } from '@fortawesome/free-solid-svg-icons';
+	import { faDownload, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 	export let data: PageData;
 </script>
@@ -48,7 +48,10 @@
 						</div>
 					{/if}
 
-					<div class="grow flex justify-end">
+					<div class="grow flex justify-end space-x-2">
+						{#if data.self}
+							<a href="/dash/videos/{data.video.id}" class="btn">Edit</a>
+						{/if}
 						<a href={data.url} rel="noreferrer" target="_blank" class="btn">
 							<Fa icon={faDownload} />
 						</a>
@@ -87,10 +90,19 @@
 
 			<div class="space-y-2 mt-8 flex flex-col w-1/3">
 				{#each data.video.comments as comment}
-					<div class="card bg-base-200 p-4">
-						<span class="font-bold">{comment.user.username}</span>
-						{comment.message}
-					</div>
+					<form method="post" class="card flex-row bg-base-200 p-4" use:enhance>
+						<input type="hidden" name="id" value={comment.id} />
+						<div class="flex flex-col">
+							<a href="/{comment.user.username}" class="font-bold">{comment.user.username}</a>
+							{comment.message}
+						</div>
+						<div class="grow" />
+						{#if comment.self}
+							<button class="btn btn-ghost btn-sm" formaction="?/deleteComment">
+								<Fa icon={faTrash} />
+							</button>
+						{/if}
+					</form>
 				{/each}
 			</div>
 		</div>
