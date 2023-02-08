@@ -1,11 +1,31 @@
 <script lang="ts">
-	import { RatingType } from '@prisma/client';
+	import { RatingType, type Comment } from '@prisma/client';
 	import Fa from 'svelte-fa/src/fa.svelte';
 	import type { PageData } from './$types';
 	import { enhance } from '$app/forms';
-	import { faDownload, faTrash } from '@fortawesome/free-solid-svg-icons';
+	import {
+		faCheck,
+		faDownload,
+		faHandMiddleFinger,
+		faPen,
+		faRemove,
+		faTrash,
+	} from '@fortawesome/free-solid-svg-icons';
 
 	export let data: PageData;
+
+	let editCommentId: string | null = null;
+	let oldComment: string | null = null;
+
+	async function updateComment(comment: Partial<Comment>) {
+		await fetch(`/video/${data.video.id}/comment`, {
+			method: 'put',
+			body: JSON.stringify(comment),
+		});
+
+		editCommentId = null;
+		oldComment = null;
+	}
 </script>
 
 <svelte:head>
@@ -83,7 +103,7 @@
 					class="flex flex-col items-start gap-2 mt-8"
 					use:enhance
 				>
-					<textarea name="message" class="textarea textarea-bordered w-96" />
+					<textarea name="message" class="textarea textarea-bordered w-96" required />
 					<button class="btn btn-primary">Post</button>
 				</form>
 			{/if}
@@ -94,10 +114,43 @@
 						<input type="hidden" name="id" value={comment.id} />
 						<div class="flex flex-col">
 							<a href="/{comment.user.username}" class="font-bold">{comment.user.username}</a>
-							{comment.message}
+							{#if editCommentId === comment.id}
+								<textarea class="textarea mt-4" bind:value={comment.message} />
+							{:else}
+								{comment.message}
+							{/if}
 						</div>
 						<div class="grow" />
 						{#if comment.self}
+							<div class="hide-no-js flex">
+								{#if editCommentId === comment.id}
+									<button
+										class="btn btn-ghost btn-sm text-green-500"
+										on:click|preventDefault={() => updateComment(comment)}
+									>
+										<Fa icon={faCheck} />
+									</button>
+									<button
+										class="btn btn-ghost btn-sm text-red-500"
+										on:click|preventDefault={() => {
+											editCommentId = null;
+											if (oldComment) comment.message = oldComment;
+										}}
+									>
+										<Fa icon={faRemove} />
+									</button>
+								{:else}
+									<button
+										class="btn btn-ghost btn-sm"
+										on:click|preventDefault={() => {
+											editCommentId = comment.id;
+											oldComment = comment.message;
+										}}
+									>
+										<Fa icon={faPen} />
+									</button>
+								{/if}
+							</div>
 							<button class="btn btn-ghost btn-sm" formaction="?/deleteComment">
 								<Fa icon={faTrash} />
 							</button>

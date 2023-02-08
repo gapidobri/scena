@@ -37,6 +37,7 @@ export const load: PageServerLoad = async ({
 				videoFile: { select: { id: true, key: true, url: true } },
 				comments: {
 					select: { id: true, message: true, user: { select: { id: true, username: true } } },
+					orderBy: { createdAt: 'desc' },
 				},
 			},
 		}),

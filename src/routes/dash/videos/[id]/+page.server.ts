@@ -9,7 +9,20 @@ export const load: PageServerLoad = async ({ params: { id }, locals: { userId } 
 
 	const video = await prisma.video.findFirst({
 		where: { id, userId },
-		include: { videoFile: true },
+		include: {
+			videoFile: true,
+			comments: {
+				orderBy: { createdAt: 'desc' },
+				include: {
+					user: {
+						select: {
+							id: true,
+							username: true,
+						},
+					},
+				},
+			},
+		},
 	});
 	if (!video) throw error(404, 'Not Found');
 
@@ -18,6 +31,7 @@ export const load: PageServerLoad = async ({ params: { id }, locals: { userId } 
 		description: video.description,
 		published: video.published,
 		url: video.videoFile?.url,
+		comments: video.comments,
 	};
 };
 
@@ -86,5 +100,21 @@ export const actions: Actions = {
 		await prisma.video.delete({ where: { id: video.id } });
 
 		throw redirect(301, '/dash/videos');
+	},
+
+	deleteComment: async ({ request, locals: { userId } }) => {
+		if (!userId) throw error(401, 'Unauthorized');
+
+		const data = await request.formData();
+
+		const id = data.get('id');
+		if (!id) throw error(500, 'Comment id is missing');
+
+		const comment = await prisma.comment.findFirst({
+			where: { id: id.toString(), video: { userId } },
+		});
+		if (!comment) throw error(404, 'Comment not found');
+
+		await prisma.comment.delete({ where: { id: comment.id } });
 	},
 };
