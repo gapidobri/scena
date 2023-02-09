@@ -64,7 +64,9 @@
 				</div>
 				<div class="chat-header">
 					{comment.user.username}
-					<div class="text-xs opacity-50"><Time relative timestamp={comment.createdAt} /></div>
+					<div class="text-xs opacity-50">
+						<Time relative timestamp={comment.createdAt} />
+					</div>
 				</div>
 				<div class="flex items-center">
 					<div class="chat-bubble">{comment.message}</div>

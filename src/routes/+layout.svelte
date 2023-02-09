@@ -14,12 +14,18 @@
 
 <div class="flex flex-col h-screen">
 	<div class="navbar bg-base-200">
-		<div class="flex-1">
+		<div class="navbar-start">
 			<a href="/" class="btn btn-ghost normal-case text-xl">
 				<img src={logoText} alt="scena_logo" class="h-8" />
 			</a>
+			<ul class="menu menu-horizontal px-1">
+				{#if data.auth}
+					<li><a href="/liked">Liked Videos</a></li>
+					<li><a href="/subscriptions">Subscriptions</a></li>
+				{/if}
+			</ul>
 		</div>
-		<div class="flex-none">
+		<div class="navbar-end flex-none">
 			<ul class="menu menu-horizontal px-1">
 				{#if data.auth}
 					<li><a href="/dash">Dashboard</a></li>

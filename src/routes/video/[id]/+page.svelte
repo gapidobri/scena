@@ -3,14 +3,8 @@
 	import Fa from 'svelte-fa/src/fa.svelte';
 	import type { PageData } from './$types';
 	import { enhance } from '$app/forms';
-	import {
-		faCheck,
-		faDownload,
-		faHandMiddleFinger,
-		faPen,
-		faRemove,
-		faTrash,
-	} from '@fortawesome/free-solid-svg-icons';
+	import { faCheck, faDownload, faPen, faRemove, faTrash } from '@fortawesome/free-solid-svg-icons';
+	import UserCard from '$lib/components/user/UserCard.svelte';
 
 	export let data: PageData;
 
@@ -41,7 +35,7 @@
 		<div class="mx-4">
 			<div class="flex">
 				<div class="flex flex-grow items-center">
-					<span class="text-xl font-semibold">{data.video.title}</span>
+					<span class="text-2xl font-semibold">{data.video.title}</span>
 
 					{#if data.auth}
 						<form class="mx-4" method="post" use:enhance>
@@ -79,14 +73,17 @@
 				</div>
 			</div>
 
+			{#if data.views === 1}
+				{data.views} view
+			{:else}
+				{data.views} views
+			{/if}
+
 			<div class="mt-2">
 				<span>{data.video.description ?? ''}</span>
 			</div>
 			<div class="flex mt-4 gap-2">
-				<a href="/{data.video.user.username}">
-					{data.video.user.username}
-				</a>
-
+				<UserCard user={data.video.user} />
 				{#if data.auth && !data.self}
 					<form method="post" use:enhance>
 						<button class="btn" class:btn-primary={!data.subscribed} formaction="?/subscribe">
@@ -103,7 +100,12 @@
 					class="flex flex-col items-start gap-2 mt-8"
 					use:enhance
 				>
-					<textarea name="message" class="textarea textarea-bordered w-96" required />
+					<textarea
+						name="message"
+						placeholder="Comment"
+						class="textarea textarea-bordered w-96"
+						required
+					/>
 					<button class="btn btn-primary">Post</button>
 				</form>
 			{/if}

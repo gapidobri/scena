@@ -29,7 +29,7 @@ export const load: PageServerLoad = async ({
 	params: { id: videoId },
 	locals: { userId, session },
 }) => {
-	const [video, likes, dislikes] = await prisma.$transaction([
+	const [video, likes, dislikes, views] = await prisma.$transaction([
 		prisma.video.findFirst({
 			where: { id: videoId, published: true },
 			include: {
@@ -46,6 +46,9 @@ export const load: PageServerLoad = async ({
 		}),
 		prisma.rating.count({
 			where: { videoId, type: RatingType.dislike },
+		}),
+		prisma.videoView.count({
+			where: { videoId },
 		}),
 	]);
 
@@ -69,6 +72,19 @@ export const load: PageServerLoad = async ({
 		}
 
 		userRating = await getUserRating(userId, videoId);
+
+		await prisma.videoView.upsert({
+			where: {
+				videoId_userId: { videoId: video.id, userId },
+			},
+			create: {
+				video: { connect: { id: video.id } },
+				user: { connect: { id: userId } },
+			},
+			update: {
+				updatedAt: new Date(),
+			},
+		});
 	}
 
 	// let url: string | null = null;
@@ -88,6 +104,7 @@ export const load: PageServerLoad = async ({
 		auth: !!session,
 		subscribed,
 		self: selfVideo,
+		views,
 	};
 };
 

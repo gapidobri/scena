@@ -18,7 +18,11 @@
 		<tbody>
 			{#each data.videos as video}
 				<tr>
-					<td><a href="/dash/videos/{video.id}">{video.title ?? 'Unnamed Video'}</a></td>
+					<td>
+						<a class="link link-hover" href="/dash/videos/{video.id}">
+							{video.title ?? 'Unnamed Video'}
+						</a>
+					</td>
 					<td>{video.createdAt.toLocaleString()}</td>
 					<td>
 						{#if video.published}

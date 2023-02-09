@@ -1,24 +1,32 @@
 <script lang="ts">
 	import type { PageData } from './$types';
-	import thumbnail from '$lib/assets/thumbnail.jpg';
+	import { enhance } from '$app/forms';
+	import VideoCard from '$lib/components/video/VideoCard.svelte';
+	import Avatar from '$lib/components/common/Avatar.svelte';
 
 	export let data: PageData;
 </script>
 
-<div class="flex justify-center p-4">
-	<h1 class="text-4xl">
-		{data.user.username}
-	</h1>
+<div
+	class="h-64 w-full bg-cover bg-center flex items-end justify-center"
+	style="background-image: url('https://unsplash.com/photos/78A265wPiO4/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8Mnx8bmF0dXJlfGVufDB8fHx8MTY3NTk2Mzc2Nw')"
+>
+	<div class="flex items-end max-w-6xl grow ml-16">
+		<Avatar seed={data.user.username} class="w-28" />
+		<span class="text-3xl ml-2 mb-3 text-white">{data.user.username}</span>
+
+		<form class="grow flex justify-end mb-4" method="post" use:enhance>
+			{#if !data.self}
+				<button class="btn mt-4" class:btn-primary={!data.subscribed} formaction="?/subscribe">
+					{data.subscribed ? 'Subscribed' : 'Subscribe'}
+				</button>
+			{/if}
+		</form>
+	</div>
 </div>
 
 <div class="flex flex-wrap gap-4 m-8 justify-center cursor-pointer">
 	{#each data.user.videos as video}
-		<a href="/video/{video.id}" class="text-center">
-			<div
-				class="card shadow-md duration-100 bg-base-200 w-64 aspect-video bg-cover mb-1"
-				style="background-image: url({thumbnail});"
-			/>
-			{video.title}
-		</a>
+		<VideoCard {video} />
 	{/each}
 </div>
