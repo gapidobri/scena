@@ -1,4 +1,4 @@
-import { kratos } from '$lib/ory';
+import { kratos, syncUsers } from '$lib/ory';
 import type { Handle } from '@sveltejs/kit';
 
 export const handle: Handle = async ({ event, resolve }) => {
@@ -13,3 +13,5 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 	return await resolve(event);
 };
+
+await syncUsers();

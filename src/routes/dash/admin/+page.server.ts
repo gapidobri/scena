@@ -1,5 +1,4 @@
-import { kratosAdmin } from '$lib/ory';
-import prisma from '$lib/prisma';
+import { syncUsers } from '$lib/ory';
 import { error } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 
@@ -10,21 +9,6 @@ export const load: PageServerLoad = async ({ parent }) => {
 
 export const actions: Actions = {
 	sync: async () => {
-		const res = await kratosAdmin.adminListIdentities();
-
-		await prisma.$transaction(
-			res.data.map((user) => {
-				const username =
-					user.traits.email.split('@')[0] +
-					Math.floor(Math.random() * 1000000)
-						.toString()
-						.padStart(6, '0');
-				return prisma.user.upsert({
-					where: { id: user.id },
-					update: {},
-					create: { id: user.id, username },
-				});
-			}),
-		);
+		await syncUsers();
 	},
 };
