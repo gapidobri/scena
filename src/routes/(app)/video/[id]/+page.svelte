@@ -3,8 +3,16 @@
 	import Fa from 'svelte-fa/src/fa.svelte';
 	import type { PageData } from './$types';
 	import { enhance } from '$app/forms';
-	import { faCheck, faDownload, faPen, faRemove, faTrash } from '@fortawesome/free-solid-svg-icons';
+	import {
+		faCheck,
+		faDownload,
+		faEdit,
+		faPen,
+		faRemove,
+		faTrash,
+	} from '@fortawesome/free-solid-svg-icons';
 	import UserCard from '$lib/components/user/UserCard.svelte';
+	import AddToPlaylistModal from '$lib/components/video/AddToPlaylist.svelte';
 
 	export let data: PageData;
 
@@ -63,8 +71,13 @@
 					{/if}
 
 					<div class="grow flex justify-end space-x-2">
+						<AddToPlaylistModal videoId={data.video.id} playlists={data.playlists} />
+
 						{#if data.self}
-							<a href="/dash/videos/{data.video.id}" class="btn">Edit</a>
+							<a href="/dash/videos/{data.video.id}" class="btn gap-2">
+								<Fa icon={faEdit} />
+								Edit
+							</a>
 						{/if}
 						<a href={data.url} rel="noreferrer" target="_blank" class="btn">
 							<Fa icon={faDownload} />

@@ -4,6 +4,7 @@
 	import Time from 'svelte-time';
 	import Fa from 'svelte-fa/src/fa.svelte';
 	import { faTrash } from '@fortawesome/free-solid-svg-icons';
+	import Avatar from '$lib/components/common/Avatar.svelte';
 
 	export let data: PageData;
 
@@ -55,10 +56,7 @@
 				<div class="chat-image avatar">
 					<div class="w-10 rounded-full">
 						<a href="/{comment.user.username}">
-							<img
-								src="https://api.dicebear.com/5.x/pixel-art/svg?seed={comment.user.username}"
-								alt="avatar"
-							/>
+							<Avatar seed={comment.user.username} />
 						</a>
 					</div>
 				</div>

@@ -1,5 +1,5 @@
 import prisma from '$lib/prisma';
-import { RatingType, type Rating } from '@prisma/client';
+import { RatingType, type Playlist, type PlaylistVideo, type Rating } from '@prisma/client';
 import { error } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 
@@ -60,6 +60,7 @@ export const load: PageServerLoad = async ({
 
 	let userRating: Rating | null = null;
 	let subscribed = false;
+	let playlists: (Playlist & { videos: Pick<PlaylistVideo, 'videoId'>[] })[] = [];
 	if (userId) {
 		if (!selfVideo) {
 			const subscription = await prisma.subscription.findFirst({
@@ -73,18 +74,26 @@ export const load: PageServerLoad = async ({
 
 		userRating = await getUserRating(userId, videoId);
 
-		await prisma.videoView.upsert({
-			where: {
-				videoId_userId: { videoId: video.id, userId },
-			},
-			create: {
-				video: { connect: { id: video.id } },
-				user: { connect: { id: userId } },
-			},
-			update: {
-				updatedAt: new Date(),
-			},
-		});
+		const res = await prisma.$transaction([
+			prisma.videoView.upsert({
+				where: {
+					videoId_userId: { videoId: video.id, userId },
+				},
+				create: {
+					video: { connect: { id: video.id } },
+					user: { connect: { id: userId } },
+				},
+				update: {
+					updatedAt: new Date(),
+				},
+			}),
+			prisma.playlist.findMany({
+				where: { userId },
+				include: { videos: { select: { videoId: true } } },
+			}),
+		]);
+
+		playlists = res[1];
 	}
 
 	// let url: string | null = null;
@@ -105,6 +114,7 @@ export const load: PageServerLoad = async ({
 		subscribed,
 		self: selfVideo,
 		views,
+		playlists,
 	};
 };
 
@@ -193,5 +203,26 @@ export const actions: Actions = {
 		if (!comment) throw error(404, 'Comment not found');
 
 		await prisma.comment.delete({ where: { id: comment.id } });
+	},
+
+	addToPlaylist: async ({ request, params: { id: videoId }, locals: { userId } }) => {
+		if (!userId) throw error(401, 'Unauthorized');
+
+		const data = await request.formData();
+
+		const playlistIds = Array.from(data.keys());
+
+		await prisma.playlistVideo.deleteMany({
+			where: {
+				videoId,
+				playlist: { userId },
+				playlistId: { notIn: playlistIds },
+			},
+		});
+
+		await prisma.playlistVideo.createMany({
+			skipDuplicates: true,
+			data: playlistIds.map((playlistId) => ({ videoId, playlistId })),
+		});
 	},
 };

@@ -5,12 +5,8 @@
 	export let data: PageData;
 </script>
 
-<div class="m-4">
-	<span class="text-3xl">Subscriptions</span>
-
-	<div class="flex m-4">
-		{#each data.users as user}
-			<UserCard {user} />
-		{/each}
-	</div>
+<div class="flex">
+	{#each data.users as user}
+		<UserCard {user} />
+	{/each}
 </div>

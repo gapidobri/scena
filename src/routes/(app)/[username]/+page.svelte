@@ -8,7 +8,7 @@
 </script>
 
 <div
-	class="h-64 w-full bg-cover bg-center flex items-end justify-center"
+	class="h-64 bg-cover bg-center flex items-end justify-center rounded-box shadow-lg"
 	style="background-image: url('https://unsplash.com/photos/78A265wPiO4/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8Mnx8bmF0dXJlfGVufDB8fHx8MTY3NTk2Mzc2Nw')"
 >
 	<div class="flex items-end max-w-6xl grow ml-16">
