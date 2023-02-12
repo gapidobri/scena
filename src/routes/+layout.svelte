@@ -12,6 +12,13 @@
 	$: returnTo = $page.url.pathname.startsWith('/dash') ? '/' : $page.url.pathname;
 </script>
 
+<svelte:head>
+	<meta property="og:site_name" content="Scena" />
+	<meta property="og:locale" content="en_US" />
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content={$page.url.toString()} />
+</svelte:head>
+
 <div class="flex flex-col h-screen">
 	<div class="navbar bg-base-200">
 		<div class="navbar-start">

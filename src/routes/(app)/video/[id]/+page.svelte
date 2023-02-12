@@ -32,6 +32,10 @@
 
 <svelte:head>
 	<title>{data.video.title}</title>
+	<meta property="og:title" content={data.video.title} />
+	{#if data.video.description}
+		<meta property="og:description" content={data.video.description} />
+	{/if}
 </svelte:head>
 
 <div class="m-6 flex flex-col items-center">
