@@ -10,6 +10,9 @@
 </svelte:head>
 
 <div class="flex flex-wrap gap-4 m-8 justify-center cursor-pointer">
+	{#if data.videos.length === 0}
+		<span class="text-xl h-full">No videos found</span>
+	{/if}
 	{#each data.videos as video}
 		<VideoCard {video} />
 	{/each}

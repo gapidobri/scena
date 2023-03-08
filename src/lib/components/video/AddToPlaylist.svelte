@@ -9,8 +9,8 @@
 </script>
 
 <input type="checkbox" id="add-to-playlist-modal" class="modal-toggle" />
-<form class="modal" method="post" action="?/addToPlaylist" use:enhance>
-	<div class="modal-box">
+<label for="add-to-playlist-modal" class="modal cursor-pointer">
+	<form class="modal-box" method="post" action="?/addToPlaylist" use:enhance>
 		<h3 class="font-bold text-lg">Select the playlist</h3>
 
 		{#each playlists as playlist}
@@ -30,8 +30,8 @@
 		<div class="modal-action">
 			<button class="btn">Save</button>
 		</div>
-	</div>
-</form>
+	</form>
+</label>
 
 <label class="btn gap-2" for="add-to-playlist-modal">
 	<Fa icon={faAdd} />

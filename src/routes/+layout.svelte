@@ -27,6 +27,16 @@
 			</a>
 		</div>
 		<div class="navbar-end flex-none">
+			<form action="/" method="get">
+				<input
+					name="search"
+					type="text"
+					placeholder="Search"
+					class="input w-full max-w-xs h-8"
+					value={data.search}
+				/>
+				<input type="submit" hidden />
+			</form>
 			<ul class="menu menu-horizontal px-1">
 				{#if data.auth}
 					<li><a href="/dash">Dashboard</a></li>
