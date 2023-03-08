@@ -53,9 +53,9 @@ export const actions: Actions = {
 			throw error(404, 'Not Found');
 		}
 
-		const thumbnail = await data.get('thumbnail');
-		if (thumbnail) {
-			await uploadThumbnail(id, thumbnail as File);
+		const thumbnail = data.get('thumbnail') as File;
+		if (thumbnail && thumbnail.size) {
+			await uploadThumbnail(id, thumbnail);
 		}
 
 		if (video.videoFile?.key && video.published !== published) {

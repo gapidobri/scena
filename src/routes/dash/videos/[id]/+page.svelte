@@ -12,8 +12,6 @@
 	let deleting = false;
 	let thumbnailUrl = data.thumbnail ?? thumbnail;
 
-	console.log(data.thumbnail);
-
 	function updateThumbnailPreview(files: FileList | null) {
 		if (!files) return;
 
