@@ -8,7 +8,7 @@
 </script>
 
 <div class="flex flex-row h-full">
-	<ul class="menu p-4">
+	<ul class="menu p-6">
 		<li>
 			<a href="/" class:active={$page.url.pathname === '/'}>
 				<Fa icon={faHome} />

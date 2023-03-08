@@ -3,15 +3,28 @@
 	import type { PageData } from './$types';
 	import Time from 'svelte-time';
 	import Fa from 'svelte-fa/src/fa.svelte';
-	import { faTrash } from '@fortawesome/free-solid-svg-icons';
+	import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 	import Avatar from '$lib/components/common/Avatar.svelte';
+	import thumbnail from '$lib/assets/thumbnail.jpg';
 
 	export let data: PageData;
 
 	let deleting = false;
+	let thumbnailUrl = data.thumbnail ?? thumbnail;
+
+	console.log(data.thumbnail);
+
+	function updateThumbnailPreview(files: FileList | null) {
+		if (!files) return;
+
+		const fileReader = new FileReader();
+		fileReader.onload = () => (thumbnailUrl = fileReader.result as string);
+		fileReader.readAsDataURL(files[0]);
+	}
 </script>
 
 <form
+	class="space-y-4"
 	method="POST"
 	use:enhance={(req) => {
 		req.data.set('published', data.published.toString());
@@ -20,6 +33,24 @@
 	<input class="input input-bordered" type="text" name="title" bind:value={data.title} />
 
 	<br />
+
+	<div class="card shadow-md duration-100 bg-base-200 w-64 overflow-hidden">
+		<div
+			class="aspect-video bg-cover bg-center mb-1 flex justify-end"
+			style="background-image: url({thumbnailUrl});"
+		/>
+		<input
+			class="opacity-0 absolute -z-10"
+			type="file"
+			accept="image/*"
+			name="thumbnail"
+			id="thumbnail-picker"
+			on:change={(e) => updateThumbnailPreview(e.currentTarget.files)}
+		/>
+		<label for="thumbnail-picker" class="bg-neutral flex justify-center py-2 cursor-pointer">
+			<Fa icon={faEdit} />
+		</label>
+	</div>
 
 	<div class="form-control">
 		<label class="label cursor-pointer" for="published">
@@ -32,8 +63,6 @@
 			/>
 		</label>
 	</div>
-
-	<br />
 
 	<button class="btn btn-primary" formaction="?/update">Update</button>
 	<button

@@ -1,6 +1,7 @@
 import { env } from '$env/dynamic/private';
 import prisma from '$lib/prisma';
 import s3 from '$lib/s3';
+import { uploadThumbnail } from '$lib/utils/upload';
 import { error, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 
@@ -11,6 +12,7 @@ export const load: PageServerLoad = async ({ params: { id }, locals: { userId } 
 		where: { id, userId },
 		include: {
 			videoFile: true,
+			thumbnail: true,
 			comments: {
 				orderBy: { createdAt: 'desc' },
 				include: {
@@ -32,6 +34,7 @@ export const load: PageServerLoad = async ({ params: { id }, locals: { userId } 
 		published: video.published,
 		url: video.videoFile?.url,
 		comments: video.comments,
+		thumbnail: video.thumbnail?.url,
 	};
 };
 
@@ -48,6 +51,11 @@ export const actions: Actions = {
 		});
 		if (!video) {
 			throw error(404, 'Not Found');
+		}
+
+		const thumbnail = await data.get('thumbnail');
+		if (thumbnail) {
+			await uploadThumbnail(id, thumbnail as File);
 		}
 
 		if (video.videoFile?.key && video.published !== published) {

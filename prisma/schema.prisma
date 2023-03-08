@@ -9,7 +9,7 @@ datasource db {
 }
 
 model User {
-  id String @id @default(uuid())
+  id String @id
 
   username String  @unique @default(cuid())
   admin    Boolean @default(false)
@@ -36,7 +36,7 @@ model User {
 }
 
 model Video {
-  id String @id @default(uuid())
+  id String @id @default(cuid())
 
   title       String?
   description String?
@@ -82,7 +82,7 @@ model Rating {
 }
 
 model Upload {
-  id  String @id
+  id  String @id @default(cuid())
   key String @unique
 
   url String? @unique
@@ -116,7 +116,7 @@ model UploadAccessUrl {
 }
 
 model Comment {
-  id String @id @default(uuid())
+  id String @id @default(cuid())
 
   message String
   likes   CommentLike[]
@@ -155,7 +155,7 @@ model Subscription {
 }
 
 model Playlist {
-  id String @id @default(uuid())
+  id String @id @default(cuid())
 
   title       String
   description String?
