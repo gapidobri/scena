@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 
+import { writable } from 'svelte/store';
+
 type UploaderOptions = {
 	chunkSize?: number;
 	threadsQuantity?: number;
@@ -28,6 +30,8 @@ type Progress = {
 	total: number;
 	percentage: number;
 };
+
+export const uploadProgress = writable<number | null>(null);
 
 export class Uploader {
 	private readonly chunkSize: number;

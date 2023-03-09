@@ -7,7 +7,7 @@ export const load: PageServerLoad = async ({ locals: { userId } }) => {
 
 	const user = await prisma.user.findUnique({
 		where: { id: userId },
-		select: { username: true },
+		select: { id: true, username: true },
 	});
 
 	if (!user) throw error(404, 'Not found');

@@ -1,7 +1,17 @@
 import prisma from '$lib/prisma';
-import { RatingType, type Playlist, type PlaylistVideo, type Rating } from '@prisma/client';
+import {
+	RatingType,
+	type Playlist,
+	type PlaylistVideo,
+	type Rating,
+	type Video,
+} from '@prisma/client';
 import { error } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
+
+export type PlaylistWithVideos = Playlist & {
+	videos: { video: Video; displaySeq: number | null }[];
+};
 
 function getUserRating(userId: string, videoId: string) {
 	return prisma.rating.findUnique({
@@ -28,6 +38,7 @@ function clearRating(userId: string, videoId: string) {
 export const load: PageServerLoad = async ({
 	params: { id: videoId },
 	locals: { userId, session },
+	url: { searchParams },
 }) => {
 	const [video, likes, dislikes, views] = await prisma.$transaction([
 		prisma.video.findFirst({
@@ -52,8 +63,30 @@ export const load: PageServerLoad = async ({
 		}),
 	]);
 
-	if (!video) {
-		throw error(404, 'Not found');
+	if (!video) throw error(404, 'Video not found');
+
+	const playlistId = searchParams.get('playlist');
+	let playlist: PlaylistWithVideos | null = null;
+	if (playlistId) {
+		playlist = await prisma.playlist.findFirst({
+			where: {
+				id: playlistId,
+				videos: { some: { videoId } },
+			},
+			include: {
+				videos: {
+					select: { video: true, displaySeq: true },
+				},
+			},
+		});
+		if (playlist) {
+			playlist.videos.forEach((video, i) => {
+				if (video.displaySeq) {
+					playlist?.videos.splice(i, 1);
+					playlist?.videos.splice(video.displaySeq, 0, video);
+				}
+			});
+		}
 	}
 
 	const selfVideo = video.userId === userId;
@@ -108,13 +141,14 @@ export const load: PageServerLoad = async ({
 		},
 		likes,
 		dislikes,
-		url: video.videoFile?.url ?? null,
+		url: video.videoFile?.url ?? '',
 		rating: userRating?.type ?? null,
 		auth: !!session,
 		subscribed,
 		self: selfVideo,
 		views,
 		playlists,
+		playlist,
 	};
 };
 

@@ -14,6 +14,7 @@ export const load: PageServerLoad = async ({ locals: { userId }, params: { usern
 				select: {
 					id: true,
 					title: true,
+					thumbnail: { select: { url: true } },
 				},
 			},
 		},

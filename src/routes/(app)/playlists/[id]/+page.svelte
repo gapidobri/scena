@@ -1,14 +1,20 @@
 <script lang="ts">
 	import VideoDetailCard from '$lib/components/video/VideoDetailCard.svelte';
 	import type { PageData } from './$types';
+	import DeletePlaylistButton from './DeletePlaylistButton.svelte';
 
 	export let data: PageData;
 </script>
 
-<span class="text-3xl">{data.playlist.title}</span>
+<div class="flex">
+	<div class="grow">
+		<span class="text-3xl">{data.playlist.title}</span>
+	</div>
+	<DeletePlaylistButton />
+</div>
 
-<div class="space-y-4 mt-16">
+<div class="space-y-4 mt-4">
 	{#each data.playlist.videos as entry}
-		<VideoDetailCard video={entry.video} />
+		<VideoDetailCard video={entry.video} playlist={data.playlist.id} />
 	{/each}
 </div>

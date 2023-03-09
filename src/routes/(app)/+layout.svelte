@@ -7,8 +7,8 @@
 	export let data: LayoutData;
 </script>
 
-<div class="flex flex-row h-full">
-	<ul class="menu p-6">
+<div class="flex flex-row h-full space-x-4 m-4">
+	<ul class="menu bg-base-200 w-56 h-min p-2 rounded-box">
 		<li>
 			<a href="/" class:active={$page.url.pathname === '/'}>
 				<Fa icon={faHome} />
@@ -43,7 +43,7 @@
 		{/if}
 	</ul>
 
-	<div class="flex-grow p-4 pl-0">
+	<div class="flex-grow pl-0">
 		<slot />
 	</div>
 </div>

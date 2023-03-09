@@ -132,10 +132,10 @@ model Comment {
 }
 
 model CommentLike {
-  comment   Comment @relation(fields: [commentId], references: [id])
+  comment   Comment @relation(fields: [commentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   commentId String
 
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId String
 
   @@id([commentId, userId])
@@ -163,7 +163,7 @@ model Playlist {
   thumbnail   Upload? @relation(fields: [thumbnailId], references: [id])
   thumbnailId String? @unique
 
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId String
 
   public Boolean @default(false)
@@ -175,10 +175,10 @@ model Playlist {
 }
 
 model PlaylistVideo {
-  playlist   Playlist @relation(fields: [playlistId], references: [id])
+  playlist   Playlist @relation(fields: [playlistId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   playlistId String
 
-  video   Video  @relation(fields: [videoId], references: [id])
+  video   Video  @relation(fields: [videoId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   videoId String
 
   displaySeq Int?
@@ -190,10 +190,10 @@ model PlaylistVideo {
 }
 
 model VideoView {
-  video   Video  @relation(fields: [videoId], references: [id])
+  video   Video  @relation(fields: [videoId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   videoId String
 
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId String
 
   createdAt DateTime  @default(now())

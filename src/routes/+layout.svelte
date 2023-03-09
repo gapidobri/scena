@@ -5,6 +5,8 @@
 	import Fa from 'svelte-fa/src/fa.svelte';
 	import { faGithub } from '@fortawesome/free-brands-svg-icons';
 	import logoText from '$lib/assets/logo_text.png';
+	import { faSearch } from '@fortawesome/free-solid-svg-icons';
+	import { uploadProgress } from '$lib/upload';
 
 	export let data: LayoutData;
 
@@ -27,15 +29,19 @@
 			</a>
 		</div>
 		<div class="navbar-end flex-none">
-			<form action="/" method="get">
-				<input
-					name="search"
-					type="text"
-					placeholder="Search"
-					class="input w-full max-w-xs h-8"
-					value={data.search}
-				/>
-				<input type="submit" hidden />
+			<form class="form-control h-8" action="/" method="get">
+				<div class="input-group input-group-sm">
+					<input
+						name="search"
+						type="text"
+						placeholder="Search"
+						class="input input-sm"
+						value={data.search}
+					/>
+					<button type="submit" class="btn btn-square btn-sm">
+						<Fa icon={faSearch} />
+					</button>
+				</div>
 			</form>
 			<ul class="menu menu-horizontal px-1">
 				{#if data.auth}
@@ -49,11 +55,15 @@
 		</div>
 	</div>
 
-	<div class="flex-grow">
+	<div class="grow flex flex-col">
 		<slot />
 	</div>
 
-	<div class="flex p-3 justify-end">
+	{#if $uploadProgress}
+		<progress class="progress progress-primary fixed bottom-0" value={$uploadProgress} max="100" />
+	{/if}
+
+	<div class="fixed bottom-4 right-4">
 		<a href="https://github.com/gapidobri/scena">
 			<Fa icon={faGithub} size="1.5em" />
 		</a>

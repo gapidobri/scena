@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { Uploader } from '$lib/upload';
+	import { Uploader, uploadProgress } from '$lib/upload';
 
 	let files: FileList;
 	let progress = 0;
@@ -21,9 +21,15 @@
 			fileId,
 			fileKey,
 		})
-			.onProgress(({ percentage }) => (progress = percentage))
+			.onProgress(({ percentage }) => {
+				progress = percentage;
+				uploadProgress.set(percentage);
+			})
 			.onError(console.error)
-			.onSuccess(() => goto(`/dash/videos/${videoId}`))
+			.onSuccess(() => {
+				uploadProgress.set(null);
+				goto(`/dash/videos/${videoId}`);
+			})
 			.start();
 	}
 </script>

@@ -26,35 +26,46 @@
 		});
 </script>
 
-<div class="grid place-content-center h-full">
-	<div>
-		<h1 class="text-4xl text-center mb-4">{title}</h1>
-		<form class="flex flex-col" action={ui.action} method={ui.method}>
-			{#each inputNodes as node}
-				{#if node.type === UiNodeTypeEnum.Input}
-					{#if node.attributes.type === UiNodeInputAttributesTypeEnum.Submit}
-						<button class="btn btn-primary mt-4" {...node.attributes}>
+<div class="grid place-content-center grow">
+	<h1 class="text-4xl text-center mb-4">{title}</h1>
+	<form class="flex flex-col w-64" action={ui.action} method={ui.method}>
+		{#each inputNodes as node}
+			{#if node.type === UiNodeTypeEnum.Input}
+				{#if node.attributes.type === UiNodeInputAttributesTypeEnum.Submit}
+					<button class="btn btn-primary mt-4" {...node.attributes}>
+						{node.meta.label?.text}
+					</button>
+				{:else}
+					{#if node.meta.label}
+						<label class="label" for={node.attributes.name}>
 							{node.meta.label?.text}
-						</button>
-					{:else}
-						{#if node.meta.label}
-							<label class="label" for={node.attributes.name}>
-								{node.meta.label?.text}
-							</label>
-						{/if}
-						<input class="input input-bordered" {...node.attributes} />
+						</label>
 					{/if}
+					<input class="input input-bordered" {...node.attributes} />
+					{#each node.messages as message}
+						<label
+							class="label-text-alt mt-1"
+							class:text-error={message.type === 'error'}
+							for={node.attributes.name}
+						>
+							{message.text}
+						</label>
+					{/each}
 				{/if}
-			{/each}
-		</form>
-	</div>
+			{/if}
+		{/each}
+	</form>
 </div>
 
 {#if ui.messages}
-	<div class="m-4 space-y-4">
+	<div class="my-4 mx-16 space-y-4">
 		{#each ui.messages as message}
-			<div class="alert alert-error shadow-lg flex justify-center">
-				<span>{message.text}</span>
+			<div
+				class="alert shadow-lg break-keep"
+				class:alert-success={message.type === 'success'}
+				class:alert-error={message.type === 'error'}
+			>
+				{message.text}
 			</div>
 		{/each}
 	</div>
