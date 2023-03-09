@@ -5,7 +5,7 @@
 
 	export let video: Pick<Video, 'id' | 'title' | 'description'> & {
 		user: Pick<User, 'id' | 'username'>;
-		thumbnail: Pick<Upload, 'url'>;
+		thumbnail: Pick<Upload, 'url'> | null;
 	};
 	export let playlist: string | null = null;
 
@@ -17,7 +17,7 @@
 	<a href={videoUrl} class="flex grow">
 		<div
 			class="rounded-box w-32 aspect-video bg-cover bg-center"
-			style="background-image: url({video.thumbnail.url});"
+			style="background-image: url({video.thumbnail?.url ?? thumbnail});"
 		/>
 
 		<div class="ml-3 flex flex-col items-start">
