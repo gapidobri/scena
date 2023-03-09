@@ -1,10 +1,11 @@
 <script lang="ts">
-	import type { User, Video } from '@prisma/client';
+	import type { Upload, User, Video } from '@prisma/client';
 	import thumbnail from '$lib/assets/thumbnail.jpg';
 	import Avatar from '../common/Avatar.svelte';
 
 	export let video: Pick<Video, 'id' | 'title' | 'description'> & {
 		user: Pick<User, 'id' | 'username'>;
+		thumbnail: Pick<Upload, 'url'>;
 	};
 	export let playlist: string | null = null;
 
@@ -15,8 +16,8 @@
 <div class="flex rounded-box bg-base-200 p-4">
 	<a href={videoUrl} class="flex grow">
 		<div
-			class="rounded-box w-32 aspect-video bg-cover"
-			style="background-image: url({thumbnail});"
+			class="rounded-box w-32 aspect-video bg-cover bg-center"
+			style="background-image: url({video.thumbnail.url});"
 		/>
 
 		<div class="ml-3 flex flex-col items-start">

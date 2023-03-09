@@ -34,7 +34,7 @@
 
 	<div class="card shadow-md duration-100 bg-base-200 w-64 overflow-hidden">
 		<div
-			class="aspect-video bg-cover mb-1 flex justify-end"
+			class="aspect-video bg-cover bg-center mb-1 flex justify-end"
 			style="background-image: url({thumbnailUrl});"
 		/>
 		<input
