@@ -15,7 +15,13 @@ export const load: PageServerLoad = async ({ params: { id } }) => {
 							id: true,
 							title: true,
 							description: true,
-							user: { select: { id: true, username: true } },
+							user: {
+								select: {
+									id: true,
+									username: true,
+									profilePicture: { select: { url: true } },
+								},
+							},
 							thumbnail: { select: { url: true } },
 						},
 					},

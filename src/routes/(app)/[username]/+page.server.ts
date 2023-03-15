@@ -10,11 +10,13 @@ export const load: PageServerLoad = async ({ locals: { userId }, params: { usern
 		select: {
 			id: true,
 			username: true,
+			profilePicture: { select: { url: true } },
 			videos: {
 				select: {
 					id: true,
 					title: true,
 					thumbnail: { select: { url: true } },
+					user: { select: { id: true, username: true, profilePicture: { select: { url: true } } } },
 				},
 			},
 		},

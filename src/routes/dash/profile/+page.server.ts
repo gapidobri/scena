@@ -1,4 +1,5 @@
 import prisma from '$lib/prisma';
+import { uploadFile } from '$lib/utils/upload';
 import { error } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 
@@ -7,7 +8,11 @@ export const load: PageServerLoad = async ({ locals: { userId } }) => {
 
 	const user = await prisma.user.findUnique({
 		where: { id: userId },
-		select: { id: true, username: true },
+		select: {
+			id: true,
+			username: true,
+			profilePicture: { select: { url: true } },
+		},
 	});
 
 	if (!user) throw error(404, 'Not found');
@@ -23,10 +28,17 @@ export const actions: Actions = {
 
 		const data = await request.formData();
 
+		const profilePicture = data.get('profilePicture') as File | null;
+		let uploadId: string | null = null;
+		if (profilePicture) {
+			uploadId = await uploadFile(profilePicture);
+		}
+
 		await prisma.user.update({
 			where: { id: userId },
 			data: {
 				username: data.get('username')?.toString(),
+				profilePicture: { connect: { id: uploadId ?? undefined } },
 			},
 		});
 	},

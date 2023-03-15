@@ -1,13 +1,13 @@
 <script lang="ts">
-	import type { User } from '@prisma/client';
-	import Avatar from '../common/Avatar.svelte';
+	import type { UploadWithUrl } from '$lib/utils/upload';
+	import UserAvatar from './UserAvatar.svelte';
 
-	export let user: Pick<User, 'id' | 'username'>;
+	export let user: { id: string; username: string; profilePicture: UploadWithUrl };
 </script>
 
 <a href="/{user.username}">
 	<div class="rounded-box p-4 bg-base-200 flex flex-col items-center">
-		<Avatar seed={user.username} class="w-16" />
+		<UserAvatar {user} class="w-16 h-16 rounded" />
 		<span class="mt-3">{user.username}</span>
 	</div>
 </a>

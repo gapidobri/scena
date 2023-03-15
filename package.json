@@ -19,8 +19,10 @@
 		"@fortawesome/free-brands-svg-icons": "^6.3.0",
 		"@fortawesome/free-solid-svg-icons": "^6.3.0",
 		"@ory/kratos-client": "0.0.0-next.a36dda23f209",
+		"@paralleldrive/cuid2": "^2.2.0",
 		"@sveltejs/adapter-node": "^1.2.2",
 		"@sveltejs/kit": "1.0.0-next.585",
+		"@tailwindcss/line-clamp": "^0.4.2",
 		"@types/lodash": "^4.14.191",
 		"@types/node": "^18.14.6",
 		"@types/uuid": "^8.3.4",
@@ -50,7 +52,6 @@
 		"tailwindcss": "^3.2.7",
 		"tslib": "^2.5.0",
 		"typescript": "^4.9.5",
-		"uuid": "^9.0.0",
 		"vite": "^4.1.4"
 	},
 	"dependencies": {

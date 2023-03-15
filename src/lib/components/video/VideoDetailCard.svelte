@@ -1,11 +1,14 @@
 <script lang="ts">
-	import type { Upload, User, Video } from '@prisma/client';
 	import thumbnail from '$lib/assets/thumbnail.jpg';
-	import Avatar from '../common/Avatar.svelte';
+	import type { UploadWithUrl } from '$lib/utils/upload';
+	import UserAvatar from '../user/UserAvatar.svelte';
 
-	export let video: Pick<Video, 'id' | 'title' | 'description'> & {
-		user: Pick<User, 'id' | 'username'>;
-		thumbnail: Pick<Upload, 'url'> | null;
+	export let video: {
+		id: string;
+		title: string | null;
+		description: string | null;
+		user: { id: string; username: string; profilePicture: UploadWithUrl };
+		thumbnail: UploadWithUrl;
 	};
 	export let playlist: string | null = null;
 
@@ -31,7 +34,7 @@
 			<div class="flex flex-col items-center">
 				<div class="avatar">
 					<div class="w-10 rounded-full">
-						<Avatar seed={video.user.username} />
+						<UserAvatar user={video.user} />
 					</div>
 				</div>
 				{video.user.username}

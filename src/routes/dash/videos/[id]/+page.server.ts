@@ -1,7 +1,7 @@
 import { env } from '$env/dynamic/private';
 import prisma from '$lib/prisma';
 import s3 from '$lib/s3';
-import { uploadThumbnail } from '$lib/utils/upload';
+import { uploadFile } from '$lib/utils/upload';
 import { error, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 
@@ -54,8 +54,9 @@ export const actions: Actions = {
 		}
 
 		const thumbnail = data.get('thumbnail') as File;
+		let thumbnailUploadId: string | null = null;
 		if (thumbnail && thumbnail.size) {
-			await uploadThumbnail(id, thumbnail);
+			thumbnailUploadId = await uploadFile(thumbnail);
 		}
 
 		if (video.videoFile?.key && video.published !== published) {
@@ -73,6 +74,7 @@ export const actions: Actions = {
 			data: {
 				title: data.get('title')?.toString(),
 				published: data.get('published')?.toString() === 'true',
+				thumbnail: thumbnailUploadId ? { connect: { id: thumbnailUploadId } } : undefined,
 			},
 			include: { videoFile: true },
 		});

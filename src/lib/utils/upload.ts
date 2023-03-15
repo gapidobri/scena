@@ -1,10 +1,12 @@
 import { env } from '$env/dynamic/private';
 import prisma from '$lib/prisma';
 import s3 from '$lib/s3';
-import { v4 as uuid } from 'uuid';
+import { createId } from '@paralleldrive/cuid2';
 
-export async function uploadThumbnail(videoId: string, file: File) {
-	const key = `${uuid()}-${file.name}`;
+export type UploadWithUrl = { url: string | null } | null;
+
+export async function uploadFile(file: File): Promise<string> {
+	const key = `${createId()}-${file.name}`;
 
 	await s3
 		.putObject({
@@ -15,11 +17,12 @@ export async function uploadThumbnail(videoId: string, file: File) {
 		})
 		.promise();
 
-	await prisma.upload.create({
+	const upload = await prisma.upload.create({
 		data: {
 			key,
 			url: `${env.CDN_PUBLIC_URL}/${key}`,
-			thumbnail: { connect: { id: videoId } },
 		},
 	});
+
+	return upload.id;
 }

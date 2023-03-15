@@ -2,7 +2,7 @@
 	import type { PageData } from './$types';
 	import { enhance } from '$app/forms';
 	import VideoCard from '$lib/components/video/VideoCard.svelte';
-	import Avatar from '$lib/components/common/Avatar.svelte';
+	import UserAvatar from '$lib/components/user/UserAvatar.svelte';
 
 	export let data: PageData;
 </script>
@@ -12,8 +12,8 @@
 	style="background-image: url('https://unsplash.com/photos/78A265wPiO4/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8Mnx8bmF0dXJlfGVufDB8fHx8MTY3NTk2Mzc2Nw')"
 >
 	<div class="flex items-end max-w-6xl grow ml-16">
-		<Avatar seed={data.user.username} class="w-28" />
-		<span class="text-3xl ml-2 mb-3 text-white">{data.user.username}</span>
+		<UserAvatar user={data.user} class="w-28 rounded-t" />
+		<span class="text-3xl ml-4 mb-3 text-white">{data.user.username}</span>
 
 		<form class="grow flex justify-end mb-4" method="post" use:enhance>
 			{#if !data.self}

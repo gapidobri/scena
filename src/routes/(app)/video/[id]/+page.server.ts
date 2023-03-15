@@ -44,7 +44,13 @@ export const load: PageServerLoad = async ({
 		prisma.video.findFirst({
 			where: { id: videoId, published: true },
 			include: {
-				user: { select: { id: true, username: true } },
+				user: {
+					select: {
+						id: true,
+						username: true,
+						profilePicture: { select: { url: true } },
+					},
+				},
 				videoFile: { select: { id: true, key: true, url: true } },
 				comments: {
 					select: { id: true, message: true, user: { select: { id: true, username: true } } },

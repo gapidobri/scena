@@ -1,7 +1,7 @@
 import { env } from '$env/dynamic/private';
 import prisma from '$lib/prisma';
 import s3 from '$lib/s3';
-import { v4 as uuid } from 'uuid';
+import { createId } from '@paralleldrive/cuid2';
 import { error, json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 
@@ -19,7 +19,7 @@ export const POST: RequestHandler = async ({ request, locals: { userId } }) => {
 	const { Key: key, UploadId: uploadId } = await s3
 		.createMultipartUpload({
 			Bucket: env.S3_BUCKET,
-			Key: `${uuid()}-${body.name}`,
+			Key: `${createId()}-${body.name}`,
 		})
 		.promise();
 	if (!key || !uploadId) {

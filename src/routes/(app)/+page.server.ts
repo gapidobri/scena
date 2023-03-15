@@ -9,7 +9,18 @@ export const load: PageServerLoad = async ({ parent }) => {
 			published: true,
 			title: { search: search ?? undefined },
 		},
-		include: { thumbnail: { select: { url: true } } },
+		select: {
+			id: true,
+			title: true,
+			user: {
+				select: {
+					id: true,
+					username: true,
+					profilePicture: { select: { url: true } },
+				},
+			},
+			thumbnail: { select: { url: true } },
+		},
 	});
 	return { videos };
 };

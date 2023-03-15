@@ -9,7 +9,7 @@
 	async function handleVideoEnd() {
 		if (playlist) {
 			const playlistIndex = playlist.videos.findIndex((v) => v.video.id === videoId);
-			if (playlistIndex + 2 >= playlist.videos.length) return;
+			if (playlistIndex >= playlist.videos.length - 1) return;
 			const nextVideoId = playlist.videos[playlistIndex + 1].video.id;
 			await goto(`/video/${nextVideoId}?playlist=${playlist?.id}`);
 		}

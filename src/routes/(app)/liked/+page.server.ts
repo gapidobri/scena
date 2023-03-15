@@ -11,7 +11,13 @@ export const load: PageServerLoad = async ({ locals: { userId } }) => {
 			ratings: { some: { userId, type: RatingType.like } },
 		},
 		include: {
-			user: { select: { id: true, username: true } },
+			user: {
+				select: {
+					id: true,
+					username: true,
+					profilePicture: { select: { url: true } },
+				},
+			},
 			thumbnail: { select: { url: true } },
 		},
 	});
