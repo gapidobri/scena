@@ -14,6 +14,8 @@ specifiers:
   '@types/uuid': ^8.3.4
   '@typescript-eslint/eslint-plugin': ^5.54.1
   '@typescript-eslint/parser': ^5.54.1
+  '@vime/core': ^5.4.0
+  '@vime/svelte': ^5.4.0
   autoprefixer: ^10.4.13
   aws-sdk: ^2.1331.0
   daisyui: ^2.51.3
@@ -22,6 +24,7 @@ specifiers:
   eslint: ^8.35.0
   eslint-config-prettier: ^8.7.0
   eslint-plugin-svelte3: ^4.0.0
+  hls.js: ^1.3.4
   lodash: ^4.17.21
   moment: ^2.29.4
   postcss: ^8.4.21
@@ -38,6 +41,7 @@ specifiers:
   tailwindcss: ^3.2.7
   tslib: ^2.5.0
   typescript: ^4.9.5
+  vidstack: ^0.4.2
   vite: ^4.1.4
 
 dependencies:
@@ -56,6 +60,8 @@ devDependencies:
   '@types/uuid': 8.3.4
   '@typescript-eslint/eslint-plugin': 5.54.1_mlk7dnz565t663n4razh6a6v6i
   '@typescript-eslint/parser': 5.54.1_ycpbpc6yetojsgtrx3mwntkhsu
+  '@vime/core': 5.4.0
+  '@vime/svelte': 5.4.0_dtoka2vl2phfwj6tgfvkoiavle
   autoprefixer: 10.4.13_postcss@8.4.21
   aws-sdk: 2.1331.0
   daisyui: 2.51.3_gbtt6ss3tbiz4yjtvdr6fbrj44
@@ -64,6 +70,7 @@ devDependencies:
   eslint: 8.35.0
   eslint-config-prettier: 8.7.0_eslint@8.35.0
   eslint-plugin-svelte3: 4.0.0_n4ieifq2d7jq3sqoe474cgqlim
+  hls.js: 1.3.4
   lodash: 4.17.21
   moment: 2.29.4
   postcss: 8.4.21
@@ -80,6 +87,7 @@ devDependencies:
   tailwindcss: 3.2.7_postcss@8.4.21
   tslib: 2.5.0
   typescript: 4.9.5
+  vidstack: 0.4.2
   vite: 4.1.4_tbu6ibuzbmq2zng52hwcifltki
 
 packages:
@@ -362,6 +370,10 @@ packages:
       '@jridgewell/sourcemap-codec': 1.4.14
     dev: true
 
+  /@maverick-js/signals/5.9.1:
+    resolution: {integrity: sha512-/iq6pyYUcN9VDOv3KyOsrSJRuImOZOSJuDA/hS3zWseg4BkW7LWn08cr4gMM2FSNi06758T1P34nJG+UbCAm4A==}
+    dev: true
+
   /@noble/hashes/1.2.0:
     resolution: {integrity: sha512-FZfhjEDbT5GRswV3C6uvLPHMiVD6lQBmpoX5+eSiPaMTXte/IKqI5dykDxzZB/WBeK/CDuQRBWarPdi3FNY2zQ==}
     dev: true
@@ -491,6 +503,12 @@ packages:
       rollup: 3.18.0
     dev: true
 
+  /@stencil/core/2.5.2:
+    resolution: {integrity: sha512-bgjPXkSzzg1WnTgVUm6m5ZzpKt602WmA/QljODAW1xVN40OHJdbGblzF/F6MFzqv2c5Cy30CB41arc8qADIdcQ==}
+    engines: {node: '>=12.10.0', npm: '>=6.0.0'}
+    hasBin: true
+    dev: true
+
   /@sveltejs/adapter-node/1.2.2_yqg5nbxigx6vbqbd67cf5rj7ea:
     resolution: {integrity: sha512-HA+QPRve97ZAQfZ0wkHjtoSR9ilyYZV82T7zRgzm2WJ0rIpAgyRYf6K7KNwiCq23KKkN0hZHY5elNyCnVz8zrA==}
     peerDependencies:
@@ -564,6 +582,10 @@ packages:
 
   /@types/estree/1.0.0:
     resolution: {integrity: sha512-WulqXMDUTYAXCjZnk6JtIHPigp55cVtDgDrO2gHRwhyJto21+1zbVCtOYB2L1F9w4qCQ0rOGWBnBe0FNTiEJIQ==}
+    dev: true
+
+  /@types/fscreen/1.0.1:
+    resolution: {integrity: sha512-hV2d0BreihMGtrg+EdAFOIl/O2EL5vhAheHJUztGE/lPFZIN8ZCpGFL8hCbtyi1CfhKjDRCf47sHjP+FwJ4q0Q==}
     dev: true
 
   /@types/json-schema/7.0.11:
@@ -729,6 +751,27 @@ packages:
     dependencies:
       '@typescript-eslint/types': 5.54.1
       eslint-visitor-keys: 3.3.0
+    dev: true
+
+  /@vime/core/5.4.0:
+    resolution: {integrity: sha512-ZP19/+9RDeX8q0dPGW1Au77/c7hqb8Lsd/4zV0pAsld+op/cYVMoByu5wd6luQ0R6AKwe/mYdNTDatAHZlhHZw==}
+    dependencies:
+      '@stencil/core': 2.5.2
+      '@types/fscreen': 1.0.1
+      fscreen: 1.2.0
+      mitt: 3.0.0
+      stencil-wormhole: 3.4.1
+    dev: true
+
+  /@vime/svelte/5.4.0_dtoka2vl2phfwj6tgfvkoiavle:
+    resolution: {integrity: sha512-H12FCt6NDYlNZYFz6gRvJ0d4aI48hIKcqnIMegmvpUh4hS/iddQhEWi6KaW+QxOSqyPcq8JHmQiOfjWX7hLu6Q==}
+    requiresBuild: true
+    peerDependencies:
+      '@vime/core': 5.4.0
+      svelte: ^3.0.0
+    dependencies:
+      '@vime/core': 5.4.0
+      svelte: 3.55.1
     dev: true
 
   /acorn-jsx/5.3.2_acorn@8.8.2:
@@ -1409,6 +1452,10 @@ packages:
     resolution: {integrity: sha512-OO0pH2lK6a0hZnAdau5ItzHPI6pUlvI7jMVnxUQRtw4owF2wk8lOSabtGDCTP4Ggrg2MbGnWO9X8K1t4+fGMDw==}
     dev: true
 
+  /fscreen/1.2.0:
+    resolution: {integrity: sha512-hlq4+BU0hlPmwsFjwGGzZ+OZ9N/wq9Ljg/sq3pX+2CD7hrJsX9tJgWWK/wiNTFM212CLHWhicOoqwXyZGGetJg==}
+    dev: true
+
   /fsevents/2.3.2:
     resolution: {integrity: sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==}
     engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
@@ -1528,6 +1575,10 @@ packages:
     engines: {node: '>= 0.4.0'}
     dependencies:
       function-bind: 1.1.1
+    dev: true
+
+  /hls.js/1.3.4:
+    resolution: {integrity: sha512-iFEwVqtEDk6sKotcTwtJ5OMo/nuDTk9PrpB8FI2J2WYf8EriTVfR4FaK0aNyYtwbYeRSWCXJKlz23xeREdlNYg==}
     dev: true
 
   /ieee754/1.1.13:
@@ -1746,6 +1797,19 @@ packages:
       '@jridgewell/sourcemap-codec': 1.4.14
     dev: true
 
+  /maverick.js/0.32.3:
+    resolution: {integrity: sha512-2jzhv6nmK5mw6gEuoq5MeEGUBEhF5keZxi3w7/2oIB4NSvfCBBSOyKH9fBagpvAAOtT5ySgVAJlivg9vUBdJsQ==}
+    engines: {node: '>=16'}
+    dependencies:
+      '@maverick-js/signals': 5.9.1
+      type-fest: 2.19.0
+    dev: true
+
+  /media-icons/0.4.2:
+    resolution: {integrity: sha512-jrxoQzxsZFyzt6P3CoGZWa6FVKoR/Ii1plbVjtyTSyQGpeVWkJ++0oBAwGOv/F9mWRxmGkaQ04uEIKTFouRG1w==}
+    engines: {node: '>=16'}
+    dev: true
+
   /merge2/1.4.1:
     resolution: {integrity: sha512-8q7VEgMJW4J8tcfVPy8g09NcQwZdbwFEqhe/WZkoIzjn/3TGDwtOCYtXGxA3O8tPzpczCCDgv+P2P5y00ZJOOg==}
     engines: {node: '>= 8'}
@@ -1785,6 +1849,10 @@ packages:
 
   /minimist/1.2.8:
     resolution: {integrity: sha512-2yyAR8qBkN3YuheJanUpWC5U3bb5osDywNB8RzDVlDwDHbocAJveqqj1u8+SVD7jkWT4yvsHCpWqqWqAxb0zCA==}
+    dev: true
+
+  /mitt/3.0.0:
+    resolution: {integrity: sha512-7dX2/10ITVyqh4aOSVI9gdape+t9l2/8QxHrFmUXu4EEUpdlxl6RudZUPZoc+zuY2hk1j7XxVroIVIan/pD/SQ==}
     dev: true
 
   /mkdirp/0.5.6:
@@ -2221,6 +2289,10 @@ packages:
     deprecated: Please use @jridgewell/sourcemap-codec instead
     dev: true
 
+  /stencil-wormhole/3.4.1:
+    resolution: {integrity: sha512-ppYTcWTJnIl4ZAKwF39LTA9f/ypHfbVefsHdN2hpMQGrR57wt1TieZo9tlCM/r1Y4SFiZ5yz/cjho564C921Xw==}
+    dev: true
+
   /streamsearch/1.1.0:
     resolution: {integrity: sha512-Mcc5wHehp9aXz1ax6bZUyY5afg9u2rv5cqQI3mRrYkGC8rW2hM02jWuwjtL++LS5qinSyhj2QfLyNsuc+VsExg==}
     engines: {node: '>=10.0.0'}
@@ -2450,6 +2522,16 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
+  /type-fest/2.19.0:
+    resolution: {integrity: sha512-RAH822pAdBgcNMAfWnCBU3CFZcfZ/i1eZjwFU/dsLKumyuuP3niueg2UAukXYF0E2AAoc82ZSSf9J0WQBinzHA==}
+    engines: {node: '>=12.20'}
+    dev: true
+
+  /type-fest/3.6.1:
+    resolution: {integrity: sha512-htXWckxlT6U4+ilVgweNliPqlsVSSucbxVexRYllyMVJDtf5rTjv6kF/s+qAd4QSL1BZcnJPEJavYBPQiWuZDA==}
+    engines: {node: '>=14.16'}
+    dev: true
+
   /typescript/4.9.5:
     resolution: {integrity: sha512-1FXk9E2Hm+QzZQ7z+McJiHL4NW1F2EzMu9Nq9i3zAaGqibafqYwCVU6WyWAuyQRRzOlxou8xZSyXLEN8oKj24g==}
     engines: {node: '>=4.2.0'}
@@ -2504,6 +2586,15 @@ packages:
   /uuid/8.0.0:
     resolution: {integrity: sha512-jOXGuXZAWdsTH7eZLtyXMqUb9EcWMGZNbL9YcGBJl4MH4nrxHmZJhEHvyLFrkxo+28uLb/NYRcStH48fnD0Vzw==}
     hasBin: true
+    dev: true
+
+  /vidstack/0.4.2:
+    resolution: {integrity: sha512-ZFTKUj1BqLdvS0/YS12mfrzHQtpaVTeqFDWwPQivPeczZIOhHBDDqs8+YZCLF/C/LY74ARP8TfEu1+HfwMy0Gg==}
+    engines: {node: '>=16'}
+    dependencies:
+      maverick.js: 0.32.3
+      media-icons: 0.4.2
+      type-fest: 3.6.1
     dev: true
 
   /vite/4.1.4_tbu6ibuzbmq2zng52hwcifltki:
