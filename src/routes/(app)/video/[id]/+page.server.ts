@@ -148,6 +148,7 @@ export const load: PageServerLoad = async ({
 		likes,
 		dislikes,
 		url: video.videoFile?.url ?? '',
+		hlsUrl: video.hlsUrl,
 		rating: userRating?.type ?? null,
 		auth: !!session,
 		subscribed,

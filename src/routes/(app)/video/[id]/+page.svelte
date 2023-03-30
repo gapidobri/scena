@@ -23,7 +23,12 @@
 
 <div class="m-6 flex flex-col items-center">
 	<div class="max-w-6xl w-full flex flex-col">
-		<VideoPlayer videoId={data.video.id} url={data.url} playlist={data.playlist} />
+		<VideoPlayer
+			videoId={data.video.id}
+			url={data.url}
+			hlsUrl={data.hlsUrl}
+			playlist={data.playlist}
+		/>
 
 		<div class="mx-4">
 			<div class="flex">

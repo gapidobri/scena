@@ -7,4 +7,4 @@
 		user.profilePicture?.url ?? `https://api.dicebear.com/5.x/pixel-art/svg?seed=${user.id}`;
 </script>
 
-<img {src} alt="profile_picture" {...$$props} />
+<img alt="" {src} {...$$props} />

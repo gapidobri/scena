@@ -54,6 +54,10 @@ model Video {
   thumbnail   Upload? @relation(fields: [thumbnailId], references: [id], name: "thumbnail")
   thumbnailId String? @unique
 
+  hlsUrl String?
+
+  transcodeJob TranscodeJob? @relation(name: "transcodeJob")
+
   user   User   @relation(fields: [userId], references: [id])
   userId String
 
@@ -200,4 +204,23 @@ model VideoView {
   updatedAt DateTime? @updatedAt
 
   @@id([videoId, userId])
+}
+
+enum TranscodeJobStatus {
+  pending
+  processing
+  complete
+  error
+}
+
+model TranscodeJob {
+  id String @id @default(cuid())
+
+  video   Video?  @relation(fields: [videoId], references: [id], name: "transcodeJob", onDelete: Cascade, onUpdate: Cascade)
+  videoId String? @unique
+
+  status TranscodeJobStatus @default(pending)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
 }

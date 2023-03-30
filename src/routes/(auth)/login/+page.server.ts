@@ -1,4 +1,4 @@
-import { kratos } from '$lib/ory';
+import { kratos, syncUsers } from '$lib/ory';
 import type { PageServerLoad } from './$types';
 import { redirect } from '@sveltejs/kit';
 import { env } from '$env/dynamic/private';
@@ -16,6 +16,8 @@ export const load: PageServerLoad = async ({ request, url }) => {
 	const flow = await kratos
 		.getSelfServiceLoginFlow(flowId, request.headers.get('cookie') ?? undefined)
 		.then((res) => res.data);
+
+	await syncUsers();
 
 	return { flow };
 };

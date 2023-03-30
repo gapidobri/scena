@@ -1,120 +1,131 @@
 package main
 
 import (
-	"fmt"
-	"os"
-	"strconv"
-	"strings"
+	"encoding/json"
+	"net/http"
+	"sync"
+	"time"
 
-	ffmpeg "github.com/u2takey/ffmpeg-go"
+	"github.com/sirupsen/logrus"
 )
 
 type (
-	Format struct {
-		Name         string
-		Width        uint
-		Height       uint
-		VideoBitrate uint
-		AudioBitrate uint
-	}
-)
-
-var (
-	formats = []Format{
-		{
-			Name:         "1080p",
-			Width:        1920,
-			Height:       1080,
-			VideoBitrate: 6000,
-			AudioBitrate: 4000,
-		},
-		{
-			Name:         "720p",
-			Width:        1280,
-			Height:       720,
-			VideoBitrate: 3000,
-			AudioBitrate: 2000,
-		},
-		{
-			Name:         "480p",
-			Width:        640,
-			Height:       480,
-			VideoBitrate: 1500,
-			AudioBitrate: 1000,
-		},
+	Job struct {
+		Id  string `json:"id"`
+		Url string `json:"url"`
 	}
 )
 
 func main() {
-	transcodeToHLS("monke.mp4")
+	loadConfig()
+
+	logrus.Info("Waiting for jobs...")
+
+	for {
+		run()
+		time.Sleep(time.Second * 10)
+	}
 }
 
-func transcodeToHLS(inputFile string) {
-
-	input := ffmpeg.Input(inputFile)
-
-	audio := input.Audio()
-
-	split := input.Video().Split()
-
-	var streams []*ffmpeg.Stream
-	var args []ffmpeg.KwArgs
-	var streamMap []string
-
-	for i, format := range formats {
-		video := split.
-			Get(strconv.Itoa(i)).
-			Filter(
-				"scale",
-				nil,
-				ffmpeg.KwArgs{
-					"w": format.Width,
-					"h": format.Height,
-				},
-			)
-		streams = append(streams, video, audio)
-
-		args = append(
-			args,
-			ffmpeg.KwArgs{
-				fmt.Sprintf("maxrate:v:%d", i): fmt.Sprintf("%dk", format.VideoBitrate),
-				fmt.Sprintf("b:a:%d", i):       fmt.Sprintf("%dk", format.AudioBitrate),
-			},
-		)
-
-		streamMap = append(
-			streamMap,
-			fmt.Sprintf("v:%d,a:%d,name:%s", i, i, format.Name),
-		)
+func run() {
+	jobs, err := getAvailableJobs()
+	if err != nil {
+		logrus.WithError(err).Error("Failed to get available jobs")
+		return
 	}
 
-	cmd := ffmpeg.Output(
-		streams,
-		"out/name-%v.m3u8",
-		ffmpeg.KwArgs{
-			"var_stream_map":    strings.Join(streamMap, " "),
-			"preset":            "slow",
-			"hls_list_size":     0,
-			"threads":           0,
-			"f":                 "hls",
-			"hls_playlist_type": "event",
-			"hls_time":          3,
-			"hls_flags":         "independent_segments",
-			"master_pl_name":    "name-pl.m3u8",
-		},
-		ffmpeg.KwArgs{
-			"c:v": "libx264",
-			"crf": 22,
-			"c:a": "aac",
-			"ar":  44100,
-		},
-		ffmpeg.MergeKwArgs(args),
-	).
-		WithErrorOutput(os.Stderr).
-		Compile()
-
-	if err := cmd.Run(); err != nil {
-		fmt.Println(err)
+	if len(jobs) == 0 {
+		return
 	}
 
+	var wg sync.WaitGroup
+
+	for _, job := range jobs {
+		wg.Add(1)
+		go func(wg *sync.WaitGroup, job Job) {
+			defer wg.Done()
+
+			log := logrus.WithFields(logrus.Fields{
+				"id":  job.Id,
+				"url": job.Url,
+			})
+
+			if err := job.take(); err != nil {
+				log.WithError(err).Error("Failed to take job")
+			}
+
+			log.Info("Transcoding started")
+			path, err := job.transcode()
+			if err != nil {
+				log.WithError(err).Error("Transcoding failed")
+				job.fail()
+				return
+			}
+
+			log.Info("Uploading files")
+			if err := job.upload(*path); err != nil {
+				log.WithError(err).Error("Failed to upload files")
+				job.fail()
+				return
+			}
+
+			log.Info("Transcode finished")
+			if err := job.finish(); err != nil {
+				log.WithError(err).Error("Failed to report finished job")
+			}
+		}(&wg, job)
+	}
+
+	wg.Wait()
+}
+
+func getAvailableJobs() ([]Job, error) {
+	req, err := http.NewRequest("GET", config.APIUrl+"/internal/jobs", nil)
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Add("Authorization", "Bearer "+config.APIKey)
+
+	res, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer res.Body.Close()
+
+	var jobs []Job
+	if err := json.NewDecoder(res.Body).Decode(&jobs); err != nil {
+		return nil, err
+	}
+
+	return jobs, nil
+}
+
+func (job Job) take() error {
+	req, err := http.NewRequest("POST", config.APIUrl+"/internal/jobs/"+job.Id+"/take", nil)
+	if err != nil {
+		return err
+	}
+	req.Header.Add("Authorization", "Bearer "+config.APIKey)
+	_, err = http.DefaultClient.Do(req)
+	return err
+}
+
+func (job Job) fail() error {
+	req, err := http.NewRequest("POST", config.APIUrl+"/internal/jobs/"+job.Id+"/fail", nil)
+	if err != nil {
+		return err
+	}
+	req.Header.Add("Authorization", "Bearer "+config.APIKey)
+	_, err = http.DefaultClient.Do(req)
+	return err
+}
+
+func (job Job) finish() error {
+	req, err := http.NewRequest("POST", config.APIUrl+"/internal/jobs/"+job.Id+"/finish", nil)
+	if err != nil {
+		return err
+	}
+	req.Header.Add("Authorization", "Bearer "+config.APIKey)
+	_, err = http.DefaultClient.Do(req)
+	return err
 }

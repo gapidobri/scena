@@ -11,20 +11,22 @@
 	};
 </script>
 
-<a href="/video/{video.id}" class="card overflow-hidden bg-base-200 shadow-md w-64 cursor-pointer">
-	<div
-		class="aspect-video bg-cover bg-center"
-		style="background-image: url({video.thumbnail?.url ?? thumbnail});"
-	/>
-	<div class="flex flex-row m-2">
-		<a href="/{video.user.username}">
-			<UserAvatar user={video.user} class="w-8 h-8 rounded-full" />
-		</a>
-		<div class="ml-2 grow flex flex-col">
-			<span class="font-bold overflow-hidden overflow-ellipsis line-clamp-2 grow">
-				{video.title}
-			</span>
-			<a href="/{video.user.username}">{video.user.username}</a>
+<div class="card overflow-hidden bg-base-200 shadow-md w-64 cursor-pointer">
+	<a href="/video/{video.id}">
+		<div
+			class="aspect-video bg-cover bg-center"
+			style="background-image: url({video.thumbnail?.url ?? thumbnail});"
+		/>
+		<div class="flex flex-row m-2">
+			<a href="/{video.user.username}">
+				<UserAvatar user={video.user} class="w-8 h-8 rounded-full" />
+			</a>
+			<div class="ml-2 grow flex flex-col">
+				<span class="font-bold overflow-hidden overflow-ellipsis line-clamp-2 grow">
+					{video.title}
+				</span>
+				<a href="/{video.user.username}">{video.user.username}</a>
+			</div>
 		</div>
-	</div>
-</a>
+	</a>
+</div>
