@@ -29,6 +29,7 @@ export const POST: RequestHandler = async ({ request, locals: { userId } }) => {
 	const video = await prisma.video.create({
 		data: {
 			user: { connect: { id: userId } },
+			title: body.name,
 			videoFile: {
 				create: {
 					id: uploadId,

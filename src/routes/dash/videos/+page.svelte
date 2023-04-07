@@ -1,10 +1,19 @@
 <script lang="ts">
+	import { faUpload } from '@fortawesome/free-solid-svg-icons';
 	import type { PageData } from './$types';
+	import Fa from 'svelte-fa/src/fa.svelte';
 
 	export let data: PageData;
 </script>
 
-<h1 class="text-3xl mb-4 ml-2">Videos</h1>
+<div class="flex mb-4 ml-2">
+	<h1 class="text-3xl">Videos</h1>
+	<div class="grow" />
+	<a href="/dash/upload" class="btn gap-2">
+		<Fa icon={faUpload} />
+		Upload
+	</a>
+</div>
 
 <div class="w-full">
 	<table class="table w-full">

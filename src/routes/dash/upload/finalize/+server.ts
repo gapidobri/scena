@@ -30,10 +30,21 @@ export const POST: RequestHandler = async ({ request }) => {
 
 	const url = `${env.CDN_PUBLIC_URL}/${output.Key}`;
 
-	await prisma.upload.update({
-		where: { id: body.fileId },
-		data: { url },
-	});
+	await prisma.$transaction([
+		prisma.upload.update({
+			where: { id: body.fileId },
+			data: { url },
+		}),
+		prisma.transcodeJob.create({
+			data: {
+				video: {
+					connect: {
+						videoFileId: body.fileId,
+					},
+				},
+			},
+		}),
+	]);
 
 	return json({ url });
 };

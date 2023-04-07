@@ -34,16 +34,20 @@
 	}
 </script>
 
-<div class="flex flex-col">
-	<input
-		bind:files
-		class="file-input file-input-bordered w-full max-w-xs"
-		type="file"
-		accept="video/*"
-		on:change={handleUpload}
-	/>
+<div class="flex flex-col items-center mt-32">
+	<div class="rounded-box bg-base-200 shadow-xl p-8 w-96">
+		<h1 class="text-3xl mb-6 text-center">Upload video</h1>
 
-	{#if progress}
-		<progress class="progress progress-primary mt-4" value={progress} max="100" />
-	{/if}
+		<input
+			bind:files
+			class="file-input file-input-bordered w-full max-w-xs"
+			type="file"
+			accept="video/*"
+			on:change={handleUpload}
+		/>
+
+		{#if progress}
+			<progress class="progress progress-primary mt-4" value={progress} max="100" />
+		{/if}
+	</div>
 </div>

@@ -11,7 +11,10 @@ export const load: PageServerLoad = async ({ request, url }) => {
 
 	const flow = await kratos
 		.getSelfServiceRegistrationFlow(flowId, request.headers.get('cookie') ?? undefined)
-		.then((res) => res.data);
+		.then((res) => res.data)
+		.catch(() => {
+			throw redirect(307, '/registration');
+		});
 
 	return { flow };
 };

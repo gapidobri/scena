@@ -7,7 +7,10 @@ export const load: PageServerLoad = async ({ parent }) => {
 	const videos = await prisma.video.findMany({
 		where: {
 			published: true,
-			title: { search: search ?? undefined },
+			title: {
+				contains: search ?? undefined,
+				mode: 'insensitive',
+			},
 		},
 		select: {
 			id: true,

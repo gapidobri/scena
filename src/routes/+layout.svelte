@@ -59,7 +59,7 @@
 		<slot />
 	</div>
 
-	{#if $uploadProgress}
+	{#if $uploadProgress && $page.url.pathname !== '/dash/upload'}
 		<progress class="progress progress-primary fixed bottom-0" value={$uploadProgress} max="100" />
 	{/if}
 

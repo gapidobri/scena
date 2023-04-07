@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import Avatar from '$lib/components/common/Avatar.svelte';
 	import UserAvatar from '$lib/components/user/UserAvatar.svelte';
 	import { faEdit } from '@fortawesome/free-solid-svg-icons';
 	import Fa from 'svelte-fa/src/fa.svelte';
@@ -8,7 +7,7 @@
 
 	export let data: PageData;
 
-	let profilePictureUrl = data.user.profilePicture?.url;
+	let profilePictureUrl: string | null = null;
 
 	function updateProfilePicturePreview(files: FileList | null) {
 		if (!files) return;
@@ -31,7 +30,11 @@
 		/>
 		<label for="profile-picture-picker" class="avatar group cursor-pointer">
 			<div class="w-24 rounded">
-				<UserAvatar user={data.user} />
+				{#if profilePictureUrl}
+					<img src={profilePictureUrl} alt="" />
+				{:else}
+					<UserAvatar user={data.user} />
+				{/if}
 			</div>
 			<div class="absolute w-full h-full invisible group-hover:visible">
 				<div class="flex w-full h-full backdrop-blur-sm justify-center rounded items-center">

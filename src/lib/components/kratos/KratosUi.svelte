@@ -27,34 +27,36 @@
 </script>
 
 <div class="grid place-content-center grow">
-	<h1 class="text-4xl text-center mb-4">{title}</h1>
-	<form class="flex flex-col w-64" action={ui.action} method={ui.method}>
-		{#each inputNodes as node}
-			{#if node.type === UiNodeTypeEnum.Input}
-				{#if node.attributes.type === UiNodeInputAttributesTypeEnum.Submit}
-					<button class="btn btn-primary mt-4" {...node.attributes}>
-						{node.meta.label?.text}
-					</button>
-				{:else}
-					{#if node.meta.label}
-						<label class="label" for={node.attributes.name}>
+	<div class="rounded-box bg-base-200 p-8">
+		<h1 class="text-3xl text-center mb-4">{title}</h1>
+		<form class="flex flex-col w-64" action={ui.action} method={ui.method}>
+			{#each inputNodes as node}
+				{#if node.type === UiNodeTypeEnum.Input}
+					{#if node.attributes.type === UiNodeInputAttributesTypeEnum.Submit}
+						<button class="btn btn-primary mt-4" {...node.attributes}>
 							{node.meta.label?.text}
-						</label>
+						</button>
+					{:else}
+						{#if node.meta.label}
+							<label class="label" for={node.attributes.name}>
+								{node.meta.label?.text}
+							</label>
+						{/if}
+						<input class="input input-bordered" {...node.attributes} />
+						{#each node.messages as message}
+							<label
+								class="label-text-alt mt-1"
+								class:text-error={message.type === 'error'}
+								for={node.attributes.name}
+							>
+								{message.text}
+							</label>
+						{/each}
 					{/if}
-					<input class="input input-bordered" {...node.attributes} />
-					{#each node.messages as message}
-						<label
-							class="label-text-alt mt-1"
-							class:text-error={message.type === 'error'}
-							for={node.attributes.name}
-						>
-							{message.text}
-						</label>
-					{/each}
 				{/if}
-			{/if}
-		{/each}
-	</form>
+			{/each}
+		</form>
+	</div>
 </div>
 
 {#if ui.messages}
