@@ -13,7 +13,7 @@ ADD . .
 RUN pnpm install --offline
 
 # Generate prisma client
-ENV DISABLE_ERD=true
+RUN sed -i '5,7d' prisma/schema.prisma
 RUN pnpx prisma generate
 
 # Set default environment variables
