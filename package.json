@@ -13,7 +13,8 @@
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --check . && eslint .",
-		"format": "prettier --write ."
+		"format": "prettier --write .",
+		"prisma:generate": "prisma generate"
 	},
 	"devDependencies": {
 		"@fortawesome/free-brands-svg-icons": "^6.3.0",
@@ -46,6 +47,7 @@
 		"prettier": "^2.8.4",
 		"prettier-plugin-svelte": "^2.9.0",
 		"prisma": "^4.11.0",
+		"prisma-dbml-generator": "^0.10.0",
 		"prisma-erd-generator": "^1.5.4",
 		"sass": "^1.58.3",
 		"svelte": "^3.55.1",

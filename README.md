@@ -1,38 +1,27 @@
-# create-svelte
+<p align="center">
+  <img src="src/lib/assets/logo_text.png" width="150px" />
+</p>
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+Scena is a YouTube clone with support for transcoding and playing videos in HLS format.
 
-## Creating a project
+**Production deployment:** <https://scena.cc>
 
-If you're seeing this, you've probably already done this step. Congrats!
+# Development
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+Install dependencies
 
-# create a new project in my-app
-npm create svelte@latest my-app
+```sh
+pnpm install
 ```
 
-## Developing
+Start the development server
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+```sh
+pnpm dev
 ```
 
-## Building
+Build the app
 
-To create a production version of your app:
-
-```bash
-npm run build
+```sh
+pnpm build
 ```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.

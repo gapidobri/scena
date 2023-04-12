@@ -55,18 +55,6 @@ services:
     command: serve -c /etc/config/kratos/kratos.yml --dev --watch-courier
     restart: on-failure
 
-  kratos-selfservice-ui-node:
-    image: oryd/kratos-selfservice-ui-node:v0.11.0
-    container_name: kratos-sefservice-ui-node
-    ports:
-      - 4455:4455
-    environment:
-      - PORT=4455
-      - SECURITY_MODE=
-      - KRATOS_PUBLIC_URL=http://kratos:4433/
-      - KRATOS_BROWSER_URL=http://localhost:4433/
-    restart: on-failure
-
   kratos-db:
     image: postgres:14
     container_name: kratos-db

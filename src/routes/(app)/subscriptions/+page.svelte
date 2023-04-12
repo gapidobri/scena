@@ -5,7 +5,7 @@
 	export let data: PageData;
 </script>
 
-<div class="flex">
+<div class="flex gap-4">
 	{#each data.users as user}
 		<UserCard {user} />
 	{/each}

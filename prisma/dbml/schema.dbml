@@ -1,0 +1,230 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table User {
+  id String [pk]
+  username String [unique, not null]
+  admin Boolean [not null, default: false]
+  ratings Rating [not null]
+  videos Video [not null]
+  uploadAccessUrls UploadAccessUrl [not null]
+  comments Comment [not null]
+  playlists Playlist [not null]
+  history VideoView [not null]
+  commentLikes CommentLike [not null]
+  profilePicture Upload
+  profilePictureId String [unique]
+  banner Upload
+  bannerId String [unique]
+  subscribers Subscription [not null]
+  subscriptions Subscription [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime
+}
+
+Table Video {
+  id String [pk]
+  title String
+  description String
+  published Boolean [not null, default: false]
+  ratings Rating [not null]
+  comments Comment [not null]
+  playlists PlaylistVideo [not null]
+  views VideoView [not null]
+  videoFile Upload
+  videoFileId String [unique]
+  thumbnail Upload
+  thumbnailId String [unique]
+  hlsUrl String
+  transcodeJob TranscodeJob
+  user User [not null]
+  userId String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime
+}
+
+Table Rating {
+  user User [not null]
+  userId String [not null]
+  video Video [not null]
+  videoId String [not null]
+  type RatingType [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime
+
+  indexes {
+    (userId, videoId) [pk]
+  }
+}
+
+Table Upload {
+  id String [pk]
+  key String [unique, not null]
+  url String [unique]
+  video Video
+  thumbnail Video
+  profilePicture User
+  banner User
+  playlist Playlist
+  uploadAccessUrl UploadAccessUrl [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime
+}
+
+Table UploadAccessUrl {
+  url String [not null]
+  expirationDate DateTime [not null]
+  upload Upload [not null]
+  uploadId String [not null]
+  user User [not null]
+  userId String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime
+
+  indexes {
+    (uploadId, userId) [pk]
+  }
+}
+
+Table Comment {
+  id String [pk]
+  message String [not null]
+  likes CommentLike [not null]
+  user User [not null]
+  userId String [not null]
+  video Video [not null]
+  videoId String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime
+}
+
+Table CommentLike {
+  comment Comment [not null]
+  commentId String [not null]
+  user User [not null]
+  userId String [not null]
+
+  indexes {
+    (commentId, userId) [pk]
+  }
+}
+
+Table Subscription {
+  subscribed User [not null]
+  subscribedId String [not null]
+  subscriber User [not null]
+  subscriberId String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime
+
+  indexes {
+    (subscribedId, subscriberId) [pk]
+  }
+}
+
+Table Playlist {
+  id String [pk]
+  title String [not null]
+  description String
+  thumbnail Upload
+  thumbnailId String [unique]
+  user User [not null]
+  userId String [not null]
+  public Boolean [not null, default: false]
+  videos PlaylistVideo [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime
+}
+
+Table PlaylistVideo {
+  playlist Playlist [not null]
+  playlistId String [not null]
+  video Video [not null]
+  videoId String [not null]
+  displaySeq Int
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime
+
+  indexes {
+    (playlistId, videoId) [pk]
+  }
+}
+
+Table VideoView {
+  video Video [not null]
+  videoId String [not null]
+  user User [not null]
+  userId String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime
+
+  indexes {
+    (videoId, userId) [pk]
+  }
+}
+
+Table TranscodeJob {
+  id String [pk]
+  video Video
+  videoId String [unique]
+  status TranscodeJobStatus [not null, default: 'pending']
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime
+}
+
+Enum RatingType {
+  like
+  dislike
+}
+
+Enum TranscodeJobStatus {
+  pending
+  processing
+  complete
+  error
+}
+
+Ref: User.profilePictureId - Upload.id
+
+Ref: User.bannerId - Upload.id
+
+Ref: Video.videoFileId - Upload.id
+
+Ref: Video.thumbnailId - Upload.id
+
+Ref: Video.userId > User.id
+
+Ref: Rating.userId > User.id [delete: Cascade]
+
+Ref: Rating.videoId > Video.id [delete: Cascade]
+
+Ref: UploadAccessUrl.uploadId > Upload.id [delete: Cascade]
+
+Ref: UploadAccessUrl.userId > User.id [delete: Cascade]
+
+Ref: Comment.userId > User.id [delete: Cascade]
+
+Ref: Comment.videoId > Video.id [delete: Cascade]
+
+Ref: CommentLike.commentId > Comment.id [delete: Cascade]
+
+Ref: CommentLike.userId > User.id [delete: Cascade]
+
+Ref: Subscription.subscribedId > User.id [delete: Cascade]
+
+Ref: Subscription.subscriberId > User.id [delete: Cascade]
+
+Ref: Playlist.thumbnailId - Upload.id
+
+Ref: Playlist.userId > User.id [delete: Cascade]
+
+Ref: PlaylistVideo.playlistId > Playlist.id [delete: Cascade]
+
+Ref: PlaylistVideo.videoId > Video.id [delete: Cascade]
+
+Ref: VideoView.videoId > Video.id [delete: Cascade]
+
+Ref: VideoView.userId > User.id [delete: Cascade]
+
+Ref: TranscodeJob.videoId - Video.id [delete: Cascade]
