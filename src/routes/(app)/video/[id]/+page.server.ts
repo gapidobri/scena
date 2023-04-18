@@ -8,6 +8,7 @@ import {
 } from '@prisma/client';
 import { error } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
+import { logger } from '$lib/logger';
 
 export type PlaylistWithVideos = Playlist & {
 	videos: { video: Video; displaySeq: number | null }[];
@@ -166,10 +167,13 @@ export const actions: Actions = {
 		const userRating = await getUserRating(userId, videoId);
 		if (userRating?.type === RatingType.like) {
 			await clearRating(userId, videoId);
+			logger.info('Cleared rating', { videoId, userId });
 			return;
 		}
 
 		await setRating(userId, videoId, RatingType.like);
+
+		logger.info('Liked video', { videoId, userId });
 	},
 
 	dislike: async ({ params: { id: videoId }, locals: { userId } }) => {
@@ -178,10 +182,13 @@ export const actions: Actions = {
 		const userRating = await getUserRating(userId, videoId);
 		if (userRating?.type === RatingType.dislike) {
 			await clearRating(userId, videoId);
+			logger.info('Cleared rating', { videoId, userId });
 			return;
 		}
 
 		await setRating(userId, videoId, RatingType.dislike);
+
+		logger.info('Disliked video', { videoId, userId });
 	},
 
 	comment: async ({ params: { id: videoId }, locals: { userId }, request }) => {
@@ -196,6 +203,8 @@ export const actions: Actions = {
 		await prisma.comment.create({
 			data: { message, videoId, userId },
 		});
+
+		logger.info('Commented on video', { videoId, userId, message });
 	},
 
 	subscribe: async ({ params: { id: videoId }, locals: { userId } }) => {
@@ -222,6 +231,8 @@ export const actions: Actions = {
 			await prisma.subscription.delete({
 				where: { subscribedId_subscriberId },
 			});
+
+			logger.info('Unsubscribed', { subscribedId: subscribed.userId, subscriberId: userId });
 		} else {
 			await prisma.subscription.create({
 				data: {
@@ -229,6 +240,8 @@ export const actions: Actions = {
 					subscriber: { connect: { id: userId } },
 				},
 			});
+
+			logger.info('Subscribed', { subscribedId: subscribed.userId, subscriberId: userId });
 		}
 	},
 
@@ -244,6 +257,8 @@ export const actions: Actions = {
 		if (!comment) throw error(404, 'Comment not found');
 
 		await prisma.comment.delete({ where: { id: comment.id } });
+
+		logger.info('Deleted comment', { commentId: comment.id, userId });
 	},
 
 	addToPlaylist: async ({ request, params: { id: videoId }, locals: { userId } }) => {
@@ -265,5 +280,7 @@ export const actions: Actions = {
 			skipDuplicates: true,
 			data: playlistIds.map((playlistId) => ({ videoId, playlistId })),
 		});
+
+		logger.info('Added video to playlist', { videoId, userId, playlistIds });
 	},
 };

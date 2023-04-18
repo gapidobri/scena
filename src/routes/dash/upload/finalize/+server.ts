@@ -4,6 +4,7 @@ import type { RequestHandler } from './$types';
 import _ from 'lodash';
 import { json } from '@sveltejs/kit';
 import prisma from '$lib/prisma';
+import { logger } from '$lib/logger';
 
 type RequestBody = {
 	fileId: string;
@@ -45,6 +46,8 @@ export const POST: RequestHandler = async ({ request }) => {
 			},
 		}),
 	]);
+
+	logger.info('Completed video upload', { fileId: body.fileId, fileKey: body.fileKey });
 
 	return json({ url });
 };

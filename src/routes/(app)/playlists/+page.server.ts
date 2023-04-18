@@ -1,6 +1,7 @@
 import prisma from '$lib/prisma';
 import { error, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
+import { logger } from '$lib/logger';
 
 export const load: PageServerLoad = async ({ locals: { userId } }) => {
 	if (!userId) throw error(401, 'Unauthorized');
@@ -25,6 +26,8 @@ export const actions: Actions = {
 		const playlist = await prisma.playlist.create({
 			data: { userId, title },
 		});
+
+		logger.info('Created playlist', { playlistId: playlist.id, userId, title });
 
 		throw redirect(301, `/playlists/${playlist.id}`);
 	},

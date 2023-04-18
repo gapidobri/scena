@@ -1,6 +1,7 @@
 import prisma from '$lib/prisma';
 import { error, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
+import { logger } from '$lib/logger';
 
 export const load: PageServerLoad = async ({ params: { id } }) => {
 	const playlist = await prisma.playlist.findUnique({
@@ -47,6 +48,8 @@ export const actions: Actions = {
 		await prisma.playlist.delete({
 			where: { id: playlist.id },
 		});
+
+		logger.info('Deleted playlist', { playlistId: playlist.id, userId });
 
 		throw redirect(301, '/playlists');
 	},

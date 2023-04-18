@@ -1,6 +1,7 @@
 import { syncUsers } from '$lib/ory';
 import { error } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
+import { logger } from '$lib/logger';
 
 export const load: PageServerLoad = async ({ parent }) => {
 	const { admin } = await parent();
@@ -9,6 +10,7 @@ export const load: PageServerLoad = async ({ parent }) => {
 
 export const actions: Actions = {
 	sync: async () => {
+		logger.info('Syncing users');
 		await syncUsers();
 	},
 };

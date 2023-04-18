@@ -2,6 +2,7 @@ import prisma from '$lib/prisma';
 import { uploadFile } from '$lib/utils/upload';
 import { error } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
+import { logger } from '$lib/logger';
 
 export const load: PageServerLoad = async ({ locals: { userId } }) => {
 	if (!userId) throw error(401, 'Unauthorized');
@@ -34,12 +35,14 @@ export const actions: Actions = {
 			uploadId = await uploadFile(profilePicture);
 		}
 
-		await prisma.user.update({
+		const user = await prisma.user.update({
 			where: { id: userId },
 			data: {
 				username: data.get('username')?.toString(),
 				profilePicture: { connect: { id: uploadId ?? undefined } },
 			},
 		});
+
+		logger.info('Updated profile', { userId, profilePictureId: uploadId, username: user.username });
 	},
 };

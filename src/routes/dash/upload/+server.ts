@@ -4,15 +4,14 @@ import s3 from '$lib/s3';
 import { createId } from '@paralleldrive/cuid2';
 import { error, json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
+import { logger } from '$lib/logger';
 
 type RequestBody = {
 	name: string;
 };
 
 export const POST: RequestHandler = async ({ request, locals: { userId } }) => {
-	if (!userId) {
-		throw error(401, 'Unauthorized');
-	}
+	if (!userId) throw error(401, 'Unauthorized');
 
 	const body: RequestBody = await request.json();
 
@@ -22,6 +21,7 @@ export const POST: RequestHandler = async ({ request, locals: { userId } }) => {
 			Key: `${createId()}-${body.name}`,
 		})
 		.promise();
+
 	if (!key || !uploadId) {
 		throw error(500, 'Internal server error');
 	}
@@ -39,6 +39,8 @@ export const POST: RequestHandler = async ({ request, locals: { userId } }) => {
 		},
 		select: { id: true },
 	});
+
+	logger.info('Started video upload', { userId, videoId: video.id, uploadId, key });
 
 	return json({
 		fileId: uploadId,

@@ -1,6 +1,7 @@
 import prisma from '$lib/prisma';
 import { error } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
+import { logger } from '$lib/logger';
 
 export const load: PageServerLoad = async ({ locals: { userId }, params: { username } }) => {
 	if (!userId) throw error(401, 'Unauthorized');
@@ -54,6 +55,7 @@ export const actions: Actions = {
 					},
 				},
 			});
+			logger.info('Unsubscribed', { userId, username });
 		} else {
 			await prisma.subscription.create({
 				data: {
@@ -61,6 +63,7 @@ export const actions: Actions = {
 					subscribed: { connect: { username } },
 				},
 			});
+			logger.info('Subscribed', { userId, username });
 		}
 	},
 };

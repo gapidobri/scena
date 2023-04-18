@@ -1,5 +1,4 @@
 import { env } from '$env/dynamic/private';
-import { API_KEY } from '$env/static/private';
 import { kratos } from '$lib/ory';
 import { error, type Handle } from '@sveltejs/kit';
 

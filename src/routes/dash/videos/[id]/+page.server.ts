@@ -4,6 +4,7 @@ import s3 from '$lib/s3';
 import { uploadFile } from '$lib/utils/upload';
 import { error, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
+import { logger } from '$lib/logger';
 
 export const load: PageServerLoad = async ({ params: { id }, locals: { userId } }) => {
 	if (!userId) throw error(401, 'Unauthorized');
@@ -79,6 +80,8 @@ export const actions: Actions = {
 			include: { videoFile: true },
 		});
 
+		logger.info('Updated video', { userId, videoId: id, published, title: video.title });
+
 		return {
 			title: video.title,
 			description: video.description,
@@ -109,6 +112,8 @@ export const actions: Actions = {
 
 		await prisma.video.delete({ where: { id: video.id } });
 
+		logger.info('Deleted video', { userId, videoId: id });
+
 		throw redirect(301, '/dash/videos');
 	},
 
@@ -124,6 +129,8 @@ export const actions: Actions = {
 			where: { id: id.toString(), video: { userId } },
 		});
 		if (!comment) throw error(404, 'Comment not found');
+
+		logger.info('Deleted comment', { userId, commentId: id, title: comment.message });
 
 		await prisma.comment.delete({ where: { id: comment.id } });
 	},

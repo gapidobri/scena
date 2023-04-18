@@ -1,0 +1,53 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres:14
+    container_name: db
+    env_file:
+      - .docker.env
+    ports:
+      - 5432:5432
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    restart: on-failure
+
+  kratos-migrate:
+    image: oryd/kratos:v0.11.0
+    container_name: kratos-migrate
+    environment:
+      - DSN=postgres://kratos:password@kratos-db:5432/kratos?sslmode=disable
+    volumes:
+      - ./kratos:/etc/config/kratos
+    command: -c /etc/config/kratos/kratos.yml migrate sql -e --yes
+
+  kratos:
+    image: oryd/kratos:v0.11.0
+    container_name: kratos
+    depends_on:
+      - kratos-migrate
+    ports:
+      - 4433:4433
+      - 4434:4434
+    environment:
+      - DSN=postgres://kratos:password@kratos-db:5432/kratos?sslmode=disable
+      - LOG_LEVEL=trace
+    volumes:
+      - ./kratos:/etc/config/kratos
+    command: serve -c /etc/config/kratos/kratos.yml --dev --watch-courier
+    restart: on-failure
+
+  kratos-db:
+    image: postgres:14
+    container_name: kratos-db
+    environment:
+      - POSTGRES_USER=kratos
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=kratos
+    volumes:
+      - kratos_db_data:/var/lib/postgresql/data
+    restart: on-failure
+
+volumes:
+  db_data:
+  kratos_db_data:

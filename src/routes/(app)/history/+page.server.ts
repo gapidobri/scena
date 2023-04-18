@@ -1,6 +1,7 @@
 import prisma from '$lib/prisma';
 import { error } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
+import { logger } from '$lib/logger';
 
 export const load: PageServerLoad = async ({ locals: { userId } }) => {
 	if (!userId) throw error(401, 'Unauthorized');
@@ -47,5 +48,7 @@ export const actions: Actions = {
 		await prisma.videoView.delete({
 			where: { videoId_userId: { videoId, userId } },
 		});
+
+		logger.info('Deleted video from history', { videoId, userId });
 	},
 };
