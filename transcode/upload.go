@@ -14,6 +14,7 @@ func (job Job) upload(path string) error {
 	awsConfig := aws.NewConfig().
 		WithEndpoint(config.S3Endpoint).
 		WithRegion(config.S3Region).
+		WithS3ForcePathStyle(true).
 		WithCredentials(
 			credentials.NewCredentials(
 				&credentials.StaticProvider{

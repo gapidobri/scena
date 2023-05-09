@@ -48,6 +48,21 @@ services:
       - kratos_db_data:/var/lib/postgresql/data
     restart: on-failure
 
+  s3:
+    image: quay.io/minio/minio
+    container_name: minio
+    command: server /data --console-address ":9090"
+    ports:
+      - 9000:9000
+      - 9090:9090
+    environment:
+      - MINIO_ROOT_USER=root
+      - MINIO_ROOT_PASSWORD=password
+    volumes:
+      - s3_data:/data
+    restart: on-failure
+
 volumes:
   db_data:
   kratos_db_data:
+  s3_data:

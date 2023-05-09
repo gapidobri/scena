@@ -2,10 +2,9 @@ import prisma from '$lib/prisma';
 import { error } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import { logger } from '$lib/logger';
+import type { Subscription } from '@prisma/client';
 
 export const load: PageServerLoad = async ({ locals: { userId }, params: { username } }) => {
-	if (!userId) throw error(401, 'Unauthorized');
-
 	const user = await prisma.user.findFirst({
 		where: { username },
 		select: {
@@ -24,16 +23,20 @@ export const load: PageServerLoad = async ({ locals: { userId }, params: { usern
 	});
 	if (!user) throw error(404, 'User not found');
 
-	const subscription = await prisma.subscription.findUnique({
-		where: {
-			subscribedId_subscriberId: {
-				subscriberId: userId,
-				subscribedId: user.id,
+	let subscribed: boolean | null = null;
+	if (userId) {
+		const subscription = await prisma.subscription.findUnique({
+			where: {
+				subscribedId_subscriberId: {
+					subscriberId: userId,
+					subscribedId: user.id,
+				},
 			},
-		},
-	});
+		});
+		subscribed = !!subscription;
+	}
 
-	return { user, subscribed: !!subscription, self: userId === user.id };
+	return { user, subscribed, self: userId === user.id };
 };
 
 export const actions: Actions = {

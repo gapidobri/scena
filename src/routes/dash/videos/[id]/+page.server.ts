@@ -67,7 +67,10 @@ export const actions: Actions = {
 					Key: video.videoFile.key,
 					ACL: published ? 'public-read' : 'private',
 				})
-				.promise();
+				.promise()
+				.catch((err) =>
+					logger.error('Error updating video ACL', { userId, videoId: id, error: err }),
+				);
 		}
 
 		video = await prisma.video.update({

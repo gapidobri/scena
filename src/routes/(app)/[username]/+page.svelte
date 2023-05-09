@@ -16,7 +16,7 @@
 		<span class="text-3xl ml-4 mb-3 text-white">{data.user.username}</span>
 
 		<form class="grow flex justify-end mb-4" method="post" use:enhance>
-			{#if !data.self}
+			{#if !data.self && data.subscribed !== null}
 				<button class="btn mt-4" class:btn-primary={!data.subscribed} formaction="?/subscribe">
 					{data.subscribed ? 'Subscribed' : 'Subscribe'}
 				</button>
