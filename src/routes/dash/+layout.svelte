@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { page } from '$app/stores';
+	import { navigating, page } from '$app/stores';
 	import {
 		faAddressCard,
 		faDashboard,
@@ -11,6 +11,8 @@
 	} from '@fortawesome/free-solid-svg-icons';
 	import Fa from 'svelte-fa/src/fa.svelte';
 	import type { LayoutData } from './$types';
+	import Loading from '$lib/components/Loading.svelte';
+	import { showLoading } from '$lib/loading';
 
 	export let data: LayoutData;
 </script>
@@ -64,6 +66,10 @@
 	</ul>
 
 	<div class="w-full">
-		<slot />
+		{#if $showLoading}
+			<Loading />
+		{:else}
+			<slot />
+		{/if}
 	</div>
 </div>

@@ -1,8 +1,10 @@
 <script lang="ts">
 	import type { LayoutData } from './$types';
-	import { page } from '$app/stores';
+	import { navigating, page } from '$app/stores';
 	import { faClock, faHeart, faHome, faList, faPlay } from '@fortawesome/free-solid-svg-icons';
 	import Fa from 'svelte-fa/src/fa.svelte';
+	import Loading from '$lib/components/Loading.svelte';
+	import { showLoading } from '$lib/loading';
 
 	export let data: LayoutData;
 </script>
@@ -44,6 +46,10 @@
 	</ul>
 
 	<div class="flex-grow pl-0">
-		<slot />
+		{#if $showLoading}
+			<Loading />
+		{:else}
+			<slot />
+		{/if}
 	</div>
 </div>

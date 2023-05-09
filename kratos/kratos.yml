@@ -18,7 +18,7 @@ selfservice:
 
   flows:
     error:
-      ui_url: http://localhost:4455/error
+      ui_url: http://localhost:4433/error
 
     settings:
       ui_url: http://localhost:3000/dash/account
@@ -26,13 +26,13 @@ selfservice:
 
     recovery:
       enabled: true
-      ui_url: http://localhost:4455/recovery
+      ui_url: http://localhost:4433/recovery
 
     verification:
       enabled: true
-      ui_url: http://localhost:4455/verification
+      ui_url: http://localhost:4433/verification
       after:
-        default_browser_return_url: http://localhost:4455/
+        default_browser_return_url: http://localhost:4433/
 
     logout:
       after:
