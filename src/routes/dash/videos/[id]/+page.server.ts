@@ -14,6 +14,9 @@ export const load: PageServerLoad = async ({ params: { id }, locals: { userId } 
 		include: {
 			videoFile: true,
 			thumbnail: true,
+			transcodeJob: {
+				select: { status: true },
+			},
 			comments: {
 				orderBy: { createdAt: 'desc' },
 				include: {
@@ -36,6 +39,7 @@ export const load: PageServerLoad = async ({ params: { id }, locals: { userId } 
 		url: video.videoFile?.url,
 		comments: video.comments,
 		thumbnail: video.thumbnail?.url,
+		transcodeStatus: video.transcodeJob?.status,
 	};
 };
 

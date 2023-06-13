@@ -18,9 +18,7 @@ export const load: PageServerLoad = async ({ locals: { userId } }) => {
 
 	if (!user) throw error(404, 'Not found');
 
-	return {
-		user,
-	};
+	return { user };
 };
 
 export const actions: Actions = {
@@ -31,18 +29,24 @@ export const actions: Actions = {
 
 		const profilePicture = data.get('profilePicture') as File | null;
 		let uploadId: string | null = null;
-		if (profilePicture) {
+		if (profilePicture && profilePicture.size) {
 			uploadId = await uploadFile(profilePicture);
 		}
+
+		const username = data.get('username')?.toString();
+		if (!username) throw error(400, 'Username is required');
+		if (username.length < 3) throw error(400, 'Username must be at least 3 characters long');
 
 		const user = await prisma.user.update({
 			where: { id: userId },
 			data: {
-				username: data.get('username')?.toString(),
-				profilePicture: { connect: { id: uploadId ?? undefined } },
+				username,
+				profilePicture: uploadId ? { connect: { id: uploadId } } : undefined,
 			},
 		});
 
 		logger.info('Updated profile', { userId, profilePictureId: uploadId, username: user.username });
+
+		return { user };
 	},
 };

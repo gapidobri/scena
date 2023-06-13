@@ -19,7 +19,7 @@
 <div class="flex rounded-box bg-base-200 p-4">
 	<a href={videoUrl} class="flex grow">
 		<div
-			class="rounded-box w-32 aspect-video bg-cover bg-center"
+			class="rounded-box w-52 aspect-video bg-cover bg-center"
 			style="background-image: url({video.thumbnail?.url ?? thumbnail});"
 		/>
 
@@ -33,7 +33,7 @@
 
 			<div class="flex flex-col items-center">
 				<div class="avatar">
-					<div class="w-10 rounded-full">
+					<div class="w-12 rounded-full">
 						<UserAvatar user={video.user} />
 					</div>
 				</div>

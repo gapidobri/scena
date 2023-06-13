@@ -6,6 +6,7 @@
 	import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 	import Avatar from '$lib/components/common/Avatar.svelte';
 	import thumbnail from '$lib/assets/thumbnail.jpg';
+	import { TranscodeJobStatus } from '@prisma/client';
 
 	export let data: PageData;
 
@@ -49,6 +50,13 @@
 			<Fa icon={faEdit} />
 		</label>
 	</div>
+
+	{#if data.transcodeStatus}
+		Transcode: {data.transcodeStatus}
+		{#if data.transcodeStatus === TranscodeJobStatus.error}
+			<button class="btn btn-sm btn-error">Retry</button>
+		{/if}
+	{/if}
 
 	<div class="form-control">
 		<label class="label cursor-pointer" for="published">

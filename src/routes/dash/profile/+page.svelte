@@ -18,7 +18,16 @@
 	}
 </script>
 
-<form class="flex flex-col items-center space-y-2 pt-8" method="post" use:enhance>
+<form
+	class="flex flex-col items-center space-y-2 pt-8"
+	method="post"
+	use:enhance={() => {
+		return async ({ update }) => {
+			profilePictureUrl = null;
+			update();
+		};
+	}}
+>
 	<div class="card bg-base-200 w-96 p-4 flex flex-col items-center">
 		<input
 			class="opacity-0 absolute -z-10"
@@ -49,7 +58,7 @@
 		<span class="label-text">Username</span>
 	</label>
 	<input
-		value={data.user.username}
+		bind:value={data.user.username}
 		type="text"
 		name="username"
 		id="username"

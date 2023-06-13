@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { LayoutData } from './$types';
-	import { navigating, page } from '$app/stores';
+	import { page } from '$app/stores';
 	import { faClock, faHeart, faHome, faList, faPlay } from '@fortawesome/free-solid-svg-icons';
 	import Fa from 'svelte-fa/src/fa.svelte';
 	import Loading from '$lib/components/Loading.svelte';

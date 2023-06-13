@@ -27,7 +27,7 @@
 </script>
 
 <div class="grid place-content-center grow">
-	<div class="rounded-box bg-base-200 p-8">
+	<div class="rounded-box bg-base-200 p-8 shadow-md">
 		<h1 class="text-3xl text-center mb-4">{title}</h1>
 		<form class="flex flex-col w-64" action={ui.action} method={ui.method}>
 			{#each inputNodes as node}
