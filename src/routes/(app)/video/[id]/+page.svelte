@@ -3,7 +3,7 @@
 	import Fa from 'svelte-fa/src/fa.svelte';
 	import type { PageData } from './$types';
 	import { enhance } from '$app/forms';
-	import { faDownload, faEdit } from '@fortawesome/free-solid-svg-icons';
+	import { faDownload, faEdit, faThumbsDown, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 	import UserCard from '$lib/components/user/UserCard.svelte';
 	import AddToPlaylistModal from '$lib/components/video/AddToPlaylist.svelte';
 	import PlaylistVideoList from './PlaylistVideoList.svelte';
@@ -37,26 +37,46 @@
 
 					{#if data.auth}
 						<form class="mx-4" method="post" use:enhance>
-							<button
-								class="btn"
-								formaction="?/like"
-								class:btn-success={data.rating === RatingType.like}
-							>
-								Like ({data.likes})
-							</button>
+							<div class="join">
+								<button
+									class="btn btn-sm join-item"
+									formaction="?/like"
+									class:btn-success={data.rating === RatingType.like}
+								>
+									<Fa icon={faThumbsUp} scale={1.2} />
+									<span class="text-lg">{data.likes}</span>
+								</button>
 
-							<button
-								class="btn"
-								formaction="?/dislike"
-								class:btn-error={data.rating === RatingType.dislike}
-							>
-								Dislike ({data.dislikes})
-							</button>
+								<button
+									class="btn btn-sm join-item"
+									formaction="?/dislike"
+									class:btn-error={data.rating === RatingType.dislike}
+								>
+									<Fa icon={faThumbsDown} scale={1.2} />
+									<span class="text-lg">{data.dislikes}</span>
+								</button>
+							</div>
 						</form>
 					{:else}
 						<div class="ml-4 flex items-center">
-							<p>{data.likes} likes</p>
-							<p class="ml-3">{data.dislikes} dislikes</p>
+							<div class="join">
+								<button
+									class="btn no-animation btn-sm join-item cursor-default"
+									formaction="?/like"
+									class:btn-success={data.rating === RatingType.like}
+								>
+									<Fa icon={faThumbsUp} scale={1.2} />
+									<span class="text-lg">{data.likes}</span>
+								</button>
+
+								<div
+									class="btn no-animation btn-sm join-item cursor-default"
+									class:btn-error={data.rating === RatingType.dislike}
+								>
+									<Fa icon={faThumbsDown} scale={1.2} />
+									<span class="text-lg">{data.dislikes}</span>
+								</div>
+							</div>
 						</div>
 					{/if}
 
