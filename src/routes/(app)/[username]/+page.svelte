@@ -26,7 +26,7 @@
 </div>
 
 <div class="flex flex-wrap gap-4 m-8 justify-center cursor-pointer">
-	{#each data.user.videos as video}
+	{#each data.videos as video}
 		<VideoCard {video} />
 	{/each}
 </div>

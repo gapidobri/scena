@@ -2,7 +2,6 @@ import prisma from '$lib/prisma';
 import { error } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import { logger } from '$lib/logger';
-import type { Subscription } from '@prisma/client';
 
 export const load: PageServerLoad = async ({ locals: { userId }, params: { username } }) => {
 	const user = await prisma.user.findFirst({
@@ -11,17 +10,22 @@ export const load: PageServerLoad = async ({ locals: { userId }, params: { usern
 			id: true,
 			username: true,
 			profilePicture: { select: { url: true } },
-			videos: {
-				select: {
-					id: true,
-					title: true,
-					thumbnail: { select: { url: true } },
-					user: { select: { id: true, username: true, profilePicture: { select: { url: true } } } },
-				},
-			},
 		},
 	});
 	if (!user) throw error(404, 'User not found');
+
+	const videos = await prisma.video.findMany({
+		where: {
+			userId: user.id,
+			published: true,
+		},
+		select: {
+			id: true,
+			title: true,
+			thumbnail: { select: { url: true } },
+			user: { select: { id: true, username: true, profilePicture: { select: { url: true } } } },
+		},
+	});
 
 	let subscribed: boolean | null = null;
 	if (userId) {
@@ -36,7 +40,7 @@ export const load: PageServerLoad = async ({ locals: { userId }, params: { usern
 		subscribed = !!subscription;
 	}
 
-	return { user, subscribed, self: userId === user.id };
+	return { user, subscribed, self: userId === user.id, videos };
 };
 
 export const actions: Actions = {
