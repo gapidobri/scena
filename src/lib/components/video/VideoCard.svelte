@@ -18,7 +18,7 @@
 			style="background-image: url({video.thumbnail?.url ?? thumbnail});"
 		/>
 		<div class="flex flex-row m-2">
-			<a href="/{video.user.username}">
+			<a href="/{video.user.username}" class="flex-shrink-0">
 				<UserAvatar user={video.user} class="w-8 h-8 rounded-full" />
 			</a>
 			<div class="ml-2 grow flex flex-col">
