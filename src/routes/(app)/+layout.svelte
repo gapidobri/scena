@@ -10,14 +10,14 @@
 </script>
 
 <div class="flex flex-row h-full space-x-4 m-4">
-	<ul class="menu bg-base-200 w-56 h-min p-2 rounded-box">
-		<li>
-			<a href="/" class:active={$page.url.pathname === '/'}>
-				<Fa icon={faHome} />
-				Home
-			</a>
-		</li>
-		{#if data.auth}
+	{#if data.auth}
+		<ul class="menu bg-base-200 w-56 h-min p-2 rounded-box">
+			<li>
+				<a href="/" class:active={$page.url.pathname === '/'}>
+					<Fa icon={faHome} />
+					Home
+				</a>
+			</li>
 			<li>
 				<a href="/liked" class:active={$page.url.pathname === '/liked'}>
 					<Fa icon={faHeart} />
@@ -42,8 +42,8 @@
 					Playlists
 				</a>
 			</li>
-		{/if}
-	</ul>
+		</ul>
+	{/if}
 
 	<div class="flex-grow pl-0">
 		{#if $showLoading}

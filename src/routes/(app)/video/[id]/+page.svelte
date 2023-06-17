@@ -81,7 +81,9 @@
 					{/if}
 
 					<div class="grow flex justify-end space-x-2">
-						<AddToPlaylistModal videoId={data.video.id} playlists={data.playlists} />
+						{#if data.auth}
+							<AddToPlaylistModal videoId={data.video.id} playlists={data.playlists} />
+						{/if}
 
 						{#if data.self}
 							<a href="/dash/videos/{data.video.id}" class="btn gap-2">
