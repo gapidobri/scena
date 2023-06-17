@@ -7,6 +7,7 @@
 	import Avatar from '$lib/components/common/Avatar.svelte';
 	import thumbnail from '$lib/assets/thumbnail.jpg';
 	import { TranscodeJobStatus } from '@prisma/client';
+	import UserAvatar from '$lib/components/user/UserAvatar.svelte';
 
 	export let data: PageData;
 
@@ -52,9 +53,9 @@
 	</div>
 
 	{#if data.transcodeStatus}
-		Transcode: {data.transcodeStatus}
+		<p class="mt-4">Transcode: {data.transcodeStatus}</p>
 		{#if data.transcodeStatus === TranscodeJobStatus.error}
-			<button class="btn btn-sm btn-error">Retry</button>
+			<button formaction="?/retryTranscode" class="btn btn-sm btn-error">Retry</button>
 		{/if}
 	{/if}
 
@@ -91,7 +92,7 @@
 				<div class="chat-image avatar">
 					<div class="w-10 rounded-full">
 						<a href="/{comment.user.username}">
-							<Avatar seed={comment.user.username} />
+							<UserAvatar user={comment.user} />
 						</a>
 					</div>
 				</div>

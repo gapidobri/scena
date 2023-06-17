@@ -24,6 +24,7 @@ export const load: PageServerLoad = async ({ params: { id }, locals: { userId } 
 						select: {
 							id: true,
 							username: true,
+							profilePicture: { select: { url: true } },
 						},
 					},
 				},
@@ -140,5 +141,14 @@ export const actions: Actions = {
 		logger.info('Deleted comment', { userId, commentId: id, title: comment.message });
 
 		await prisma.comment.delete({ where: { id: comment.id } });
+	},
+
+	retryTranscode: async ({ params: { id }, locals: { userId } }) => {
+		if (!userId) throw error(401, 'Unauthorized');
+
+		await prisma.transcodeJob.update({
+			where: { videoId: id },
+			data: { status: 'pending' },
+		});
 	},
 };

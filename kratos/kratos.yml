@@ -18,7 +18,7 @@ selfservice:
 
   flows:
     error:
-      ui_url: http://localhost:4433/error
+      ui_url: http://localhost:3000/error
 
     settings:
       ui_url: http://localhost:3000/dash/account
@@ -51,7 +51,7 @@ selfservice:
             - hook: session
             - hook: web_hook
               config:
-                url: http://docker.host.internal:3000/registration/webhook
+                url: http://host.docker.internal:3000/registration/webhook
                 # url: http://app:3000/registration/webhook
                 method: POST
                 body: file:///etc/config/kratos/register.jsonnet
