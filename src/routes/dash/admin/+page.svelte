@@ -27,43 +27,47 @@
 	</form>
 </dialog>
 
-<span class="text-2xl m-4">Users</span>
+<div class="flex justify-center">
+	<div class="grow max-w-5xl bg-base-200 rounded-xl p-8">
+		<span class="text-3xl ml-3">Users</span>
 
-<div class="overflow-x-auto">
-	<table class="table">
-		<thead>
-			<tr>
-				<th>Username</th>
-				<th>E-Mail</th>
-				<th>Admin</th>
-				<th>Registered</th>
-				<th>Actions</th>
-			</tr>
-		</thead>
-		<tbody>
-			{#each data.users as user}
-				<tr>
-					<th><a href="/{user.username}">{user.username}</a></th>
-					<td>{user.traits.email}</td>
-					<td>{user.admin ? 'Yes' : 'No'}</td>
-					<td>
-						{#if user.created_at}
-							{new Date(user.created_at).toLocaleString()}
-						{/if}
-					</td>
-					<td>
-						{#if user.id !== data.userId}
-							<button
-								type="button"
-								on:click={() => handleDeleteUser(user.id)}
-								class="btn btn-sm btn-outline btn-error"
-							>
-								Remove
-							</button>
-						{/if}
-					</td>
-				</tr>
-			{/each}
-		</tbody>
-	</table>
+		<div class="overflow-x-auto">
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Username</th>
+						<th>E-Mail</th>
+						<th>Admin</th>
+						<th>Registered</th>
+						<th>Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					{#each data.users as user}
+						<tr>
+							<th><a href="/{user.username}">{user.username}</a></th>
+							<td>{user.traits.email}</td>
+							<td>{user.admin ? 'Yes' : 'No'}</td>
+							<td>
+								{#if user.created_at}
+									{new Date(user.created_at).toLocaleString()}
+								{/if}
+							</td>
+							<td>
+								{#if user.id !== data.userId}
+									<button
+										type="button"
+										on:click={() => handleDeleteUser(user.id)}
+										class="btn btn-sm btn-outline btn-error"
+									>
+										Remove
+									</button>
+								{/if}
+							</td>
+						</tr>
+					{/each}
+				</tbody>
+			</table>
+		</div>
+	</div>
 </div>

@@ -8,14 +8,21 @@ export const load: PageServerLoad = async ({ locals: { userId } }) => {
 
 	const playlists = await prisma.playlist.findMany({
 		where: { userId },
-		select: { id: true, title: true, _count: { select: { videos: true } } },
+		select: {
+			id: true,
+			title: true,
+			videos: {
+				select: { video: { select: { thumbnail: { select: { url: true } } } } },
+			},
+			_count: { select: { videos: true } },
+		},
 	});
 
 	return { playlists };
 };
 
 export const actions: Actions = {
-	create: async ({ request, locals: { userId } }) => {
+	createPlaylist: async ({ request, locals: { userId } }) => {
 		if (!userId) throw error(401, 'Unauthorized');
 
 		const data = await request.formData();

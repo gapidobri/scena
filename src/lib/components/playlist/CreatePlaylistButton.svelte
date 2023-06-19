@@ -9,7 +9,7 @@
 	<label class="modal-box relative space-y-2">
 		<label for="new-playlist-modal" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
 		<h3 class="font-bold text-lg">Create new playlist</h3>
-		<form class="flex space-x-2" action="?/create" method="post" use:enhance>
+		<form class="flex space-x-2" action="?/createPlaylist" method="post" use:enhance>
 			<input
 				type="text"
 				name="title"

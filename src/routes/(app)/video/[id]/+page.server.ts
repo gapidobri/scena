@@ -283,4 +283,19 @@ export const actions: Actions = {
 
 		logger.info('Added video to playlist', { videoId, userId, playlistIds });
 	},
+
+	createPlaylist: async ({ request, locals: { userId } }) => {
+		if (!userId) throw error(401, 'Unauthorized');
+
+		const data = await request.formData();
+
+		const title = data.get('title') as string | null;
+		if (!title) throw error(400, 'Title is missing');
+
+		const playlist = await prisma.playlist.create({
+			data: { userId, title },
+		});
+
+		logger.info('Created playlist', { playlistId: playlist.id, userId, title });
+	},
 };

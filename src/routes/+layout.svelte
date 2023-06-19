@@ -7,6 +7,7 @@
 	import logoText from '$lib/assets/logo_text.png';
 	import { faSearch } from '@fortawesome/free-solid-svg-icons';
 	import { uploadProgress } from '$lib/upload';
+	import { enhance } from '$app/forms';
 
 	export let data: LayoutData;
 

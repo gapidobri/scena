@@ -14,6 +14,7 @@ export const load: PageServerLoad = async ({ locals: { userId } }) => {
 		select: {
 			id: true,
 			username: true,
+			profilePicture: { select: { url: true } },
 		},
 	});
 

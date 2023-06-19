@@ -9,19 +9,22 @@
 	export let data: PageData;
 </script>
 
-<div class="space-y-4">
-	{#each data.history as view}
-		<form method="post" use:enhance>
-			<input type="hidden" name="videoId" value={view.videoId} />
-			<VideoDetailCard video={view.video}>
-				<div class="flex flex-col items-end">
-					<button class="btn btn-ghost btn-sm" formaction="?/delete">
-						<Fa icon={faClose} />
-					</button>
-					<div class="grow" />
-					<Time timestamp={view.updatedAt ?? view.createdAt} format="D. M. YYYY, hh:mm" />
-				</div>
-			</VideoDetailCard>
-		</form>
-	{/each}
+<div class="flex justify-center mt-8">
+	<div class="space-y-4 grow max-w-4xl">
+		<span class="ml-4 text-3xl">History</span>
+		{#each data.history as view}
+			<form method="post" use:enhance>
+				<input type="hidden" name="videoId" value={view.videoId} />
+				<VideoDetailCard video={view.video}>
+					<div class="flex flex-col items-end">
+						<button class="btn btn-ghost btn-sm" formaction="?/delete">
+							<Fa icon={faClose} />
+						</button>
+						<div class="grow" />
+						<Time timestamp={view.updatedAt ?? view.createdAt} format="D. M. YYYY, hh:mm" />
+					</div>
+				</VideoDetailCard>
+			</form>
+		{/each}
+	</div>
 </div>

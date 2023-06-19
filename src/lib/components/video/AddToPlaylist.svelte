@@ -2,6 +2,7 @@
 	import { enhance } from '$app/forms';
 	import { faAdd } from '@fortawesome/free-solid-svg-icons';
 	import type { Playlist, PlaylistVideo } from '@prisma/client';
+	import CreatePlaylistButton from '$lib/components/playlist/CreatePlaylistButton.svelte';
 	import Fa from 'svelte-fa/src/fa.svelte';
 
 	export let videoId: string;
@@ -11,9 +12,8 @@
 <input type="checkbox" id="add-to-playlist-modal" class="modal-toggle" />
 
 <label for="add-to-playlist-modal" class="modal cursor-pointer">
-	<form class="modal-box" method="post" action="?/addToPlaylist" use:enhance>
+	<form class="modal-box overflow-hidden" method="post" action="?/addToPlaylist" use:enhance>
 		<h3 class="font-bold text-lg">Select the playlist</h3>
-
 		<div class="form-control">
 			{#each playlists as playlist}
 				<label class="label cursor-pointer">
@@ -32,6 +32,7 @@
 		</div>
 
 		<div class="modal-action">
+			<CreatePlaylistButton />
 			<button class="btn">Save</button>
 		</div>
 	</form>
