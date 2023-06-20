@@ -106,7 +106,7 @@
 			<span class="text-2xl mb-4 ml-2">Comments</span>
 
 			{#each data.comments as comment}
-				<form method="post">
+				<form method="post" use:enhance>
 					<input type="hidden" name="id" value={comment.id} />
 					<div class="chat chat-start">
 						<div class="chat-image avatar">

@@ -61,7 +61,7 @@ model Video {
 
   transcodeJob TranscodeJob? @relation(name: "transcodeJob")
 
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId String
 
   createdAt DateTime  @default(now())

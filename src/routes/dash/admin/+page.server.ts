@@ -29,11 +29,11 @@ export const actions: Actions = {
 		const userId = formData.get('userId') as string | null;
 		if (!userId) throw error(400, 'userId is missing');
 
-		await kratos.adminDeleteIdentity(userId);
-
 		await prisma.user.delete({
 			where: { id: userId },
 		});
+
+		await kratos.adminDeleteIdentity(userId);
 
 		logger.info('Delete user', { userId });
 	},

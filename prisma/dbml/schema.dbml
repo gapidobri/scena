@@ -193,7 +193,7 @@ Ref: Video.videoFileId - Upload.id
 
 Ref: Video.thumbnailId - Upload.id
 
-Ref: Video.userId > User.id
+Ref: Video.userId > User.id [delete: Cascade]
 
 Ref: Rating.userId > User.id [delete: Cascade]
 
