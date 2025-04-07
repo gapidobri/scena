@@ -4,8 +4,6 @@
 
 Scena is a YouTube clone with support for transcoding and playing videos in HLS format.
 
-**Production deployment:** <https://scena.cc>
-
 # Development
 
 Install dependencies
